@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { MatSidenav } from '@angular/material/sidenav';
+import { TokenService } from 'src/app/services/token.service';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-barra-navegacion',
@@ -16,6 +20,19 @@ export class BarraNavegacionComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+    @Input() menuShow: boolean = false;
+
+  constructor(private breakpointObserver: BreakpointObserver, private _tokenService: TokenService, private _userService: UserService, private _router: Router) {
+    this._tokenService.loginObservable().subscribe({
+      next: (value) => (this.menuShow = value),
+    });
+  }
+
+  logout() {
+    this.menuShow = false;
+    this._tokenService.signOut();
+    this._userService.logout();
+    this._router.navigate(['login']);
+  }
 
 }

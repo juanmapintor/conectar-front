@@ -1,0 +1,59 @@
+<form novalidate [formGroup]="loginForm" autocomplete="off">
+  <mat-card>
+    <mat-card-title>Iniciar sesion.</mat-card-title>
+    <mat-card-subtitle
+      >Inicie sesion para empezar a utilizar la utilidad de entregas de Conectar
+      Igualdad</mat-card-subtitle
+    >
+    <mat-form-field appearance="fill">
+      <mat-label>Ingrese su direccion de email</mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="ejemplo@ejemplo.com"
+        formControlName="email"
+      />
+      <mat-error
+        *ngIf="
+          (loginForm.get('email')?.hasError('required') ||
+            loginForm.get('email')?.hasError('email')) &&
+          loginForm.get('email')?.touched
+        "
+        >El email ingresado no es valido.</mat-error
+      >
+      <mat-icon matSuffix>alternate_email</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Ingrese su contraseña</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="***"
+        formControlName="password"
+      />
+      <mat-error
+        *ngIf="
+          loginForm.get('password')?.hasError('required') &&
+          loginForm.get('password')?.touched
+        "
+        >Ingrese una contraseña antes de continuar.</mat-error
+      >
+      <mat-icon matSuffix>password</mat-icon>
+    </mat-form-field>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="loginForm.invalid  || logginIn"
+        (click)="login()"
+        style="width: 100%;"
+      >
+        Iniciar sesion.
+        <mat-icon>login</mat-icon>
+      </button>
+    </mat-card-actions>
+    <mat-card-footer *ngIf="logginIn">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+  </mat-card>
+</form>

@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -12,21 +11,120 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$conectar-front-primary: mat.define-palette(mat.$indigo-palette);
-$conectar-front-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$conectarpalette: (
+    50 : #e0efff,
+    100 : #b3d7ff,
+    200 : #80bdff,
+    300 : #4da3ff,
+    400 : #268fff,
+    500 : #007bff,
+    600 : #0073ff,
+    700 : #0068ff,
+    800 : #005eff,
+    900 : #004bff,
+    A100 : #ffffff,
+    A200 : #f2f5ff,
+    A400 : #bfceff,
+    A700 : #a6baff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+$conectarsecondarypalette: (
+    50 : #edeeef,
+    100 : #d3d6d8,
+    200 : #b6babe,
+    300 : #989ea4,
+    400 : #828a91,
+    500 : #6c757d,
+    600 : #646d75,
+    700 : #59626a,
+    800 : #4f5860,
+    900 : #3d454d,
+    A100 : #a9d3fd,
+    A200 : #77b9fc,
+    A400 : #41a0ff,
+    A700 : #2793ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #ffffff,
+    )
+);
+$conectarwarnpalette: (
+    50 : #fbe7e9,
+    100 : #f5c2c7,
+    200 : #ee9aa2,
+    300 : #e7727d,
+    400 : #e15361,
+    500 : #dc3545,
+    600 : #d8303e,
+    700 : #d32836,
+    800 : #ce222e,
+    900 : #c5161f,
+    A100 : #fff6f7,
+    A200 : #ffc3c6,
+    A400 : #ff9095,
+    A700 : #ff777c,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$conectar-front-primary: mat.define-palette($conectarpalette);
+$conectar-front-accent: mat.define-palette($conectarsecondarypalette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$conectar-front-warn: mat.define-palette(mat.$red-palette);
+$conectar-front-warn: mat.define-palette($conectarwarnpalette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$conectar-front-theme: mat.define-light-theme((
-  color: (
-    primary: $conectar-front-primary,
-    accent: $conectar-front-accent,
-    warn: $conectar-front-warn,
+$conectar-front-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $conectar-front-primary,
+      accent: $conectar-front-accent,
+      warn: $conectar-front-warn,
+    ),
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -34,6 +132,19 @@ $conectar-front-theme: mat.define-light-theme((
 @include mat.all-component-themes($conectar-front-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
