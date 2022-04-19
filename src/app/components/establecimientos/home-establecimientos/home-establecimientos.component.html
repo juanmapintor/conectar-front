@@ -1,10 +1,10 @@
-<div class="scrollable-div">
+<div class="scrollable-div"  [class.handset-padding]="isHandset$ | async" [class.desktop-padding]="!(isHandset$ | async)">
   <div class="card-div">
     <mat-card>
       <mat-card-title>Establecimientos.</mat-card-title>
       <mat-card-subtitle>Nuevo establecimiento</mat-card-subtitle>
       <mat-card-content>
-        <a class="action-button">
+        <a class="action-button" routerLink="nuevo">
           <img
             class="action-icon"
             src="../../../../assets/add_circle_outline_black_24dp.svg"

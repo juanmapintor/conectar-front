@@ -1,0 +1,324 @@
+<div class="full-centered" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="scrollable-div" [class.handset-padding]="isHandset$ | async" [class.desktop-padding]="!(isHandset$ | async)" *ngIf="!loading">
+  <mat-card
+    [class.card-80]="!(isHandset$ | async)"
+    [class.card-100]="isHandset$ | async"
+  >
+    <mat-card-subtitle>Nuevo establecimiento.</mat-card-subtitle>
+    <mat-card-title>Establecimientos</mat-card-title>
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>CUE</mat-label>
+          <input matInput placeholder="xxxxxxxxxxx" />
+          <mat-hint>Ingrese el CUE del establecimiento.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput placeholder="Nombre" />
+          <mat-hint>Ingrese el nombre del establecimiento.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Turnos</mat-label>
+          <mat-select multiple>
+            <mat-option value="1">Mañana</mat-option>
+            <mat-option value="2">Tarde</mat-option>
+            <mat-option value="3">Vespertino</mat-option>
+            <mat-option value="4">Jornada Completa</mat-option>
+          </mat-select>
+          <mat-hint
+            >Seleccione los turnos que posee el establecimiento.</mat-hint
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Horario</mat-label>
+          <input matInput type="time" />
+          <mat-hint>Desde...</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput type="time" />
+          <mat-hint>Hasta...</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Sector</mat-label>
+          <mat-select>
+            <mat-option value="1">Estatal</mat-option>
+            <mat-option value="2">Privado</mat-option>
+          </mat-select>
+          <mat-hint
+            >Seleccione el sector al que pertenece el establecimiento.</mat-hint
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nivel</mat-label>
+          <mat-select>
+            <mat-option value="1">Educación inicial</mat-option>
+            <mat-option value="2">Educación primaria</mat-option>
+            <mat-option value="3">Educación secundaria</mat-option>
+            <mat-option value="4">Educación superior</mat-option>
+          </mat-select>
+          <mat-hint>Seleccione el nivel del establecimiento.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Modalidad</mat-label>
+          <mat-select>
+            <mat-option value="1">Educación especial.</mat-option>
+            <mat-option value="2"
+              >Educación permanente de jóvenes y adultos.</mat-option
+            >
+            <mat-option value="3"
+              >Educación en contextos de encierro.</mat-option
+            >
+            <mat-option value="4"
+              >Educación rural y en áreas de frontera.</mat-option
+            >
+            <mat-option value="5"
+              >Educación domiciliaria y hospitalaria.</mat-option
+            >
+            <mat-option value="6"
+              >Educación en escuelas albergue y albergues.</mat-option
+            >
+            <mat-option value="7">Educación intercultural bilingüe.</mat-option>
+            <mat-option value="8">Educación técnico profesional.</mat-option>
+            <mat-option value="9">Educación artística.</mat-option>
+          </mat-select>
+          <mat-hint
+            >Seleccione el sector al que pertenece el establecimiento.</mat-hint
+          >
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Ambito</mat-label>
+          <mat-select>
+            <mat-option value="1">Rural</mat-option>
+            <mat-option value="2">Rural aglomerado</mat-option>
+            <mat-option value="3">Rural disperso</mat-option>
+            <mat-option value="4">Urbano</mat-option>
+          </mat-select>
+          <mat-hint>Seleccione el ambito del establecimiento.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Zona</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let zona of zonas" [value]="zona.zonaID">{{
+              zona.nombre_zona
+            }}</mat-option>
+          </mat-select>
+          <mat-hint
+            >Seleccione la zona a la que pertenece establecimiento.</mat-hint
+          >
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Ofertas</mat-label>
+          <mat-select multiple>
+            <mat-option
+              *ngFor="let oferta of ofertas"
+              [value]="oferta.ofertaID"
+              >{{ oferta.oferta }}</mat-option
+            >
+          </mat-select>
+          <mat-hint
+            >Seleccione las ofertas que el establecimiento posee.</mat-hint
+          >
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    [class.card-80]="!(isHandset$ | async)"
+    [class.card-100]="isHandset$ | async"
+  >
+    <mat-card-title>Teléfonos.</mat-card-title>
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input
+            matInput
+            type="phone"
+            placeholder="+5492645..."
+            [formControl]="telefonoInput"
+            required
+          />
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-hint>Ingresa un telefono, luego presione +</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select [(ngModel)]="tipoTelefonoSelect">
+            <mat-option value="fijo">Fijo</mat-option>
+            <mat-option value="movil">Movil</mat-option>
+          </mat-select>
+          <mat-hint>Seleccione el tipo de teléfono.</mat-hint>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="agregarTelefono()"
+          style="margin-bottom: 1.7em"
+          [class.card-100]="isHandset$ | async"
+          [disabled]="telefonoInput.invalid && !telefonoInput.touched"
+        >
+          <mat-icon style="font-size: large; color: white">add</mat-icon>
+        </button>
+      </div>
+      <p
+        *ngIf="telefonos.length == 0"
+        style="margin-top: 20px; margin-bottom: 20px"
+      >
+        No hay telefonos agregados.
+      </p>
+      <table
+        mat-table
+        [dataSource]="dataSourceTelefonos"
+        class="mat-elevation-z8"
+        style="margin-top: 20px; margin-bottom: 20px; width: 100%"
+        *ngIf="telefonos.length > 0"
+      >
+        <ng-container matColumnDef="orden">
+          <th mat-header-cell *matHeaderCellDef>N°</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono">
+          <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+          <td mat-cell *matCellDef="let element">{{ element.telefono }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.tipo === "fijo" ? "Fijo" : "Móvil" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element; let i = index"
+            style="text-align: right"
+          >
+            <button mat-icon-button color="warn" (click)="eliminarTelefono(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsTelefonos"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumnsTelefonos"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    [class.card-80]="!(isHandset$ | async)"
+    [class.card-100]="isHandset$ | async"
+  >
+    <mat-card-title>Dirección.</mat-card-title>
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Provincias</mat-label>
+          <mat-select
+            [(ngModel)]="provinciaSelected"
+            (selectionChange)="setearDepartamentos()"
+          >
+            <mat-option
+              *ngFor="let provincia of provincias"
+              [value]="provincia"
+              >{{ provincia.nombre }}</mat-option
+            >
+          </mat-select>
+          <mat-hint>Seleccione la provincia.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Departamentos</mat-label>
+          <mat-select
+            [(ngModel)]="departamentoSelected"
+            [disabled]="departamentos.length == 0"
+            (selectionChange)="setearLocalidades()"
+          >
+            <mat-option
+              *ngFor="let departamento of departamentos"
+              [value]="departamento"
+              >{{ departamento.nombre }}</mat-option
+            >
+          </mat-select>
+          <mat-hint>Seleccione el departamento.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Localidad</mat-label>
+          <mat-select
+            [(ngModel)]="localidadSelected"
+            [disabled]="localidades.length == 0"
+          >
+            <mat-option
+              *ngFor="let localidad of localidades"
+              [value]="localidad"
+              >{{ localidad.nombre }}</mat-option
+            >
+          </mat-select>
+          <mat-hint>Seleccione la localidad.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Código Postal</mat-label>
+          <input matInput placeholder="xxxxxxxxxxx" />
+          <mat-hint>Ingrese el código postal.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Calle</mat-label>
+          <input matInput placeholder="Calle..." />
+          <mat-hint>Ingrese el nombre de la calle.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Numeracion</mat-label>
+          <input matInput placeholder="1234.." />
+          <mat-hint>Ingrese la altura del establecimiento.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Cardinalidad</mat-label>
+          <mat-select>
+            <mat-option value="1">Norte</mat-option>
+            <mat-option value="2">Sur</mat-option>
+            <mat-option value="3">Este</mat-option>
+            <mat-option value="4">Oeste</mat-option>
+          </mat-select>
+          <mat-hint>Seleccione el ambito del establecimiento.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Barrio</mat-label>
+          <input matInput placeholder="Barrio..." />
+          <mat-hint>Ingrese el barrio.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Obervaciones</mat-label>
+          <textarea matInput></textarea>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

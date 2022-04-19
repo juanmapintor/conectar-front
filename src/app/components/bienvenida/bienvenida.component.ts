@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenService } from 'src/app/services/token.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-bienvenida',
@@ -9,7 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class BienvenidaComponent implements OnInit {
 
-  constructor(private _userService: UserService, private _tokenService: TokenService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
