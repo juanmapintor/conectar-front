@@ -24,6 +24,8 @@ import { BarraNavegacionComponent } from './components/barra-navegacion/barra-na
 import { LoginComponent } from './components/login/login.component';
 
 import { authInterceptorProviders } from './services/helpers/auth.interceptor';
+import { HomeEstablecimientosComponent } from './components/establecimientos/home-establecimientos/home-establecimientos.component';
+
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { authInterceptorProviders } from './services/helpers/auth.interceptor';
     AppComponent,
     BienvenidaComponent,
     BarraNavegacionComponent,
-    LoginComponent
+    LoginComponent,
+    HomeEstablecimientosComponent
   ],
   imports: [
     BrowserModule,
