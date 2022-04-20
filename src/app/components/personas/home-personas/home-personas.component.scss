@@ -35,7 +35,8 @@
   mat-card {
     margin: 20px;
     min-width: 250px;
-  
+    transition: transform .2s ease-in-out;
+
     flex: 1 1 0;
   }
   mat-card-content {

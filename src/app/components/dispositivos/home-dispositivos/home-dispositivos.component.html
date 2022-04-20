@@ -1,97 +1,102 @@
-<div class="scrollable-div"  [class.handset-padding]="isHandset$ | async" [class.desktop-padding]="!(isHandset$ | async)">
-    <div class="card-div">
-      <mat-card>
-        <mat-card-title>Dipositivos.</mat-card-title>
-        <mat-card-subtitle>Nuevo dispositivo</mat-card-subtitle>
-        <mat-card-content>
-          <a class="action-button" routerLink="nuevo">
-            <img
-              class="action-icon"
-              src="../../../../assets/add_circle_outline_black_24dp.svg"
-              alt=""
-            />
-          </a>
-          <p>
-            Crea un nuevo dispositivo para ser entregado.
-          </p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Dispositivos.</mat-card-title>
-        <mat-card-subtitle>Ver dispositivos.</mat-card-subtitle>
-        <mat-card-content>
-          <a class="action-button" routerLink="ver">
-            <img
-              class="action-icon"
-              src="../../../../assets/format_list_bulleted_black_24dp.svg"
-              alt=""
-            />
-          </a>
-          <p>Muestra los dispositivos existentes en el sistema.</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="card-div">
-      <mat-card>
-        <mat-card-title>Programas.</mat-card-title>
-        <mat-card-subtitle>Nuevo programa.</mat-card-subtitle>
-        <mat-card-content>
-          <button class="action-button">
-            <img
-              class="action-icon"
-              src="../../../../assets/add_circle_outline_black_24dp.svg"
-              alt=""
-            />
-          </button>
-          <p>
-            Crea una nuevo programa dentro del cual enmarcar la entrega de un dispositivo.
-          </p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Programas.</mat-card-title>
-        <mat-card-subtitle>Muestra programas ya existentes.</mat-card-subtitle>
-        <mat-card-content>
-          <button class="action-button">
-            <img
-              class="action-icon"
-              src="../../../../assets/format_list_bulleted_black_24dp.svg"
-              alt=""
-            />
-          </button>
-          <p>Muestra los programas ya existentes en los que se enmarca la entrega de dispositivos.</p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Tipos.</mat-card-title>
-        <mat-card-subtitle>Nuevo tipo de dispositivo.</mat-card-subtitle>
-        <mat-card-content>
-          <button class="action-button">
-            <img
-              class="action-icon"
-              src="../../../../assets/add_circle_outline_black_24dp.svg"
-              alt=""
-            />
-          </button>
-          <p>Crea un nuevo tipo de dispositivo y permite detallar sus caracteristicas.</p>
-        </mat-card-content>
-      </mat-card>
-      <mat-card>
-        <mat-card-title>Tipos.</mat-card-title>
-        <mat-card-subtitle>Muestra los tipos de dispositivos ya cargados.</mat-card-subtitle>
-        <mat-card-content>
-          <button class="action-button">
-            <img
-              class="action-icon"
-              src="../../../../assets/format_list_bulleted_black_24dp.svg"
-              alt=""
-            />
-          </button>
-          <p>
-            Muestra una lista con los tipos de dispositivos que los distintos programas han entregado.
-          </p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+<div
+  class="scrollable-div"
+  [class.handset-padding]="isHandset$ | async"
+  [class.desktop-padding]="!(isHandset$ | async)"
+>
+  <div class="card-div">
+    <mat-card>
+      <mat-card-title>Dipositivos.</mat-card-title>
+      <mat-card-subtitle>Nuevo dispositivo</mat-card-subtitle>
+      <mat-card-content>
+        <a class="action-button" routerLink="nuevo">
+          <svg-img
+            src="assets/add_circle_outline_black_24dp.svg"
+            fillColor="#6610f2"
+          ></svg-img>
+        </a>
+        <p>Crea un nuevo dispositivo para ser entregado.</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Dispositivos.</mat-card-title>
+      <mat-card-subtitle>Ver dispositivos.</mat-card-subtitle>
+      <mat-card-content>
+        <a class="action-button" routerLink="ver">
+          <svg-img
+            src="assets/format_list_bulleted_black_24dp.svg"
+            fillColor="#6610f280"
+          ></svg-img>
+        </a>
+        <p>Muestra los dispositivos existentes en el sistema.</p>
+      </mat-card-content>
+    </mat-card>
   </div>
-  
+  <div class="card-div">
+    <mat-card>
+      <mat-card-title>Programas.</mat-card-title>
+      <mat-card-subtitle>Nuevo programa.</mat-card-subtitle>
+      <mat-card-content>
+        <button class="action-button">
+          <svg-img
+            src="assets/add_circle_outline_black_24dp.svg"
+            fillColor="#fd7e14"
+          ></svg-img>
+        </button>
+        <p>
+          Crea una nuevo programa dentro del cual enmarcar la entrega de un
+          dispositivo.
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Programas.</mat-card-title>
+      <mat-card-subtitle>Muestra programas ya existentes.</mat-card-subtitle>
+      <mat-card-content>
+        <button class="action-button">
+          <svg-img
+            src="assets/format_list_bulleted_black_24dp.svg"
+            fillColor="#fd7e1480"
+          ></svg-img>
+        </button>
+        <p>
+          Muestra los programas ya existentes en los que se enmarca la entrega
+          de dispositivos.
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Tipos.</mat-card-title>
+      <mat-card-subtitle>Nuevo tipo de dispositivo.</mat-card-subtitle>
+      <mat-card-content>
+        <button class="action-button">
+          <svg-img
+            src="assets/add_circle_outline_black_24dp.svg"
+            fillColor="#e83e8c"
+          ></svg-img>
+        </button>
+        <p>
+          Crea un nuevo tipo de dispositivo y permite detallar sus
+          caracteristicas.
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Tipos.</mat-card-title>
+      <mat-card-subtitle
+        >Muestra los tipos de dispositivos ya cargados.</mat-card-subtitle
+      >
+      <mat-card-content>
+        <button class="action-button">
+          <svg-img
+            src="assets/format_list_bulleted_black_24dp.svg"
+            fillColor="#e83e8c80"
+          ></svg-img>
+        </button>
+        <p>
+          Muestra una lista con los tipos de dispositivos que los distintos
+          programas han entregado.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

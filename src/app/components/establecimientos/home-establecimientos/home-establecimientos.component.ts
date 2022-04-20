@@ -6,8 +6,10 @@ import { NuevaOfertaComponent } from '../ofertas/nueva-oferta/nueva-oferta.compo
 import { VerOfertasComponent } from '../ofertas/ver-ofertas/ver-ofertas.component';
 import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
 import { VerZonasComponent } from '../zonas/ver-zonas/ver-zonas.component';
-
+import { fadeInAnimation } from 'src/app/animations/animations';
 @Component({
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' },
   selector: 'app-home-establecimientos',
   templateUrl: './home-establecimientos.component.html',
   styleUrls: ['./home-establecimientos.component.scss'],

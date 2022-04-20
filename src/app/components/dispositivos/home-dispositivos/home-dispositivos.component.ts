@@ -1,8 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { map, Observable, shareReplay } from 'rxjs';
-
+import { fadeInAnimation } from 'src/app/animations/animations';
 @Component({
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' },
   selector: 'app-home-dispositivos',
   templateUrl: './home-dispositivos.component.html',
   styleUrls: ['./home-dispositivos.component.scss']
