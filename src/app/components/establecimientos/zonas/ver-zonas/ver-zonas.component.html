@@ -1,1 +1,55 @@
-<p>ver-zonas works!</p>
+<div class="full-centered" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <title mat-dialog-title>Zonas.</title>
+    <p>Esta tabla muestra las zonas cargadas, permite editarlas o eliminarlas.</p>
+    <p *ngIf="zonas.length == 0">No hay zonas agregadas.</p>
+    <table
+      mat-table
+      [dataSource]="dataSourceZonas"
+      class="mat-elevation-z8"
+      style="margin-top: 20px; margin-bottom: 20px; width: 100%"
+      *ngIf="zonas.length > 0"
+    >
+      <ng-container matColumnDef="zona">
+        <th mat-header-cell *matHeaderCellDef>Zona</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombre_zona }}</td>
+      </ng-container>
+      <ng-container matColumnDef="supervisor">
+        <th mat-header-cell *matHeaderCellDef>Supervisor/a</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombre_supervisor + ' ' + element.apellido_supervisor }}</td>
+      </ng-container>
+      <ng-container matColumnDef="mail">
+        <th mat-header-cell *matHeaderCellDef>E-mail</th>
+        <td mat-cell *matCellDef="let element">{{ element.mail_supervisor }}</td>
+      </ng-container>
+      <ng-container matColumnDef="telefono">
+        <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+        <td mat-cell *matCellDef="let element">{{ element.telefono_supervisor }}</td>
+      </ng-container>
+  
+  
+  
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td
+          mat-cell
+          *matCellDef="let element; let i = index"
+          style="text-align: right"
+        >
+          <button mat-icon-button color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button color="warn">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsZonas"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsZonas"></tr>
+    </table>
+    <button mat-raised-button mat-dialog-close color="primary">Aceptar</button>
+  </div>
+  

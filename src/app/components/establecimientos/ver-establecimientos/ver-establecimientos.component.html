@@ -1,0 +1,87 @@
+<div class="full-centered" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div
+  class="scrollable-div"
+  [class.handset-padding]="isHandset$ | async"
+  [class.desktop-padding]="!(isHandset$ | async)"
+  *ngIf="!loading"
+>
+  <mat-card
+    [class.card-80]="!(isHandset$ | async)"
+    [class.card-100]="isHandset$ | async"
+  >
+    <mat-card-title>Establecimientos.</mat-card-title>
+    <mat-card-subtitle
+      >Lista de los establecimientos actualmente cargados.</mat-card-subtitle
+    >
+    <mat-card-content>
+      <p *ngIf="establecimientos.length == 0">
+        No hay establecimientos agregados.
+      </p>
+      <table
+        mat-table
+        [dataSource]="dataSourceEstablecimientos"
+        class="mat-elevation-z8"
+        style="margin-top: 20px; margin-bottom: 20px; width: 100%"
+        *ngIf="establecimientos.length > 0"
+      >
+        <ng-container matColumnDef="cue">
+          <th mat-header-cell *matHeaderCellDef>CUE</th>
+          <td mat-cell *matCellDef="let element">{{ element.cue }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="matricula">
+          <th mat-header-cell *matHeaderCellDef>Matricula</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.matricula }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mail">
+          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.mail }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="horario">
+          <th mat-header-cell *matHeaderCellDef>Horario</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.horario }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element; let i = index"
+            style="text-align: right"
+          >
+            <button mat-icon-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button color="warn">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumnsEstablecimientos"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumnsEstablecimientos"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

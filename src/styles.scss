@@ -149,3 +149,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+mat-table {
+  max-width: 100%;
+  overflow-x: auto;
+}

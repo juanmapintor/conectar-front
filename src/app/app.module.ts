@@ -34,6 +34,7 @@ import { NuevaZonaComponent } from './components/establecimientos/zonas/nueva-zo
 import { VerZonasComponent } from './components/establecimientos/zonas/ver-zonas/ver-zonas.component';
 import { NuevaOfertaComponent } from './components/establecimientos/ofertas/nueva-oferta/nueva-oferta.component';
 import { VerOfertasComponent } from './components/establecimientos/ofertas/ver-ofertas/ver-ofertas.component';
+import { VerEstablecimientosComponent } from './components/establecimientos/ver-establecimientos/ver-establecimientos.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { VerOfertasComponent } from './components/establecimientos/ofertas/ver-o
     VerZonasComponent,
     NuevaOfertaComponent,
     VerOfertasComponent,
+    VerEstablecimientosComponent,
   ],
   imports: [
     BrowserModule,
