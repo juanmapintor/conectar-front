@@ -154,10 +154,6 @@ mat-table {
   overflow-x: auto;
 }
 
-mat-card {
-  transition: transform .2s ease-in-out;
-}
-
-mat-card:hover{
+mat-card.hoverable:hover{
   transform: scale(1.04);
 }

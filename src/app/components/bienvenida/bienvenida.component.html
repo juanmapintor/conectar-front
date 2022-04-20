@@ -4,7 +4,7 @@
   [class.desktop-padding]="!(isHandset$ | async)"
 >
   <div class="card-div">
-    <mat-card>
+    <mat-card class="hoverable">
       <mat-card-title>Nueva entrega.</mat-card-title>
       <mat-card-content>
         <button class="action-button">
@@ -16,7 +16,7 @@
         <p>Entrega un nuevo dispositivo a un alumno ya cargado.</p>
       </mat-card-content>
     </mat-card>
-    <mat-card>
+    <mat-card class="hoverable">
       <mat-card-title>Nueva verificación.</mat-card-title>
       <mat-card-content>
         <button class="action-button">
@@ -28,7 +28,7 @@
         <p>Actualiza el estado de la verificación de un dispositivo dado.</p>
       </mat-card-content>
     </mat-card>
-    <mat-card>
+    <mat-card class="hoverable">
       <mat-card-title>Nuevo reclamo.</mat-card-title>
       <mat-card-content>
         <a class="action-button" routerLink="nuevo">
