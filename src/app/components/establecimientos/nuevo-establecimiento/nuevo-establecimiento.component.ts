@@ -9,10 +9,15 @@ import { Router } from '@angular/router';
 import { Oferta } from 'src/app/models/oferta';
 import { OfertaService } from 'src/app/services/oferta.service';
 import { Telefono } from 'src/app/models/telefono';
-import { FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { UbicacionesService } from 'src/app/services/ubicaciones.service';
-
+import { EstablecimientoService } from 'src/app/services/establecimiento.service';
 
 @Component({
   selector: 'app-nuevo-establecimiento',
@@ -28,37 +33,71 @@ export class NuevoEstablecimientoComponent implements OnInit {
     );
 
   loading = true;
+  uploading = false;
 
   zonas: Zona[] = [];
   ofertas: Oferta[] = [];
 
   provincias: any[] = [];
-  provinciaSelected: any = null;
-
   departamentos: any[] = [];
-  departamentoSelected: any = null;
-
   localidades: any[] = [];
-  localidadSelected: any = null;
 
-  telefonoInput = new FormControl('', [Validators.required]);
+  telefonoInput = new FormControl('');
   tipoTelefonoSelect = 'fijo';
   telefonos: Telefono[] = [];
   dataSourceTelefonos = new MatTableDataSource<Telefono>();
   displayedColumnsTelefonos: string[] = [
-    'orden',
+    //'orden',
     'telefono',
     'tipo',
     'acciones',
   ];
+
+  nuevoEstablecimientoForm: FormGroup;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private _zonaService: ZonaService,
     private _ofertaService: OfertaService,
     private _ubicacionesService: UbicacionesService,
+    private _establecimientoService: EstablecimientoService,
+    private _formBuilder: FormBuilder,
     private _router: Router
   ) {
     this.provincias = this._ubicacionesService.provincias();
+    this.nuevoEstablecimientoForm = this._formBuilder.group({
+      //Datos correspondientes a Establecimiento
+      cue: new FormControl('', [Validators.required]), //
+      nombre: new FormControl('', [Validators.required]), //
+      sectorID: new FormControl('', [Validators.required]), //
+      modalidadID: new FormControl('', [Validators.required]), //
+      ambitoID: new FormControl('', [Validators.required]), //
+      nivelID: new FormControl('', [Validators.required]), //
+      zonaID: new FormControl('', [Validators.required]), //
+      matricula: new FormControl('', [Validators.min(1)]), //
+      mail: new FormControl('', [Validators.email]), //
+      horario_desde: new FormControl(''), //
+      horario_hasta: new FormControl(''), //
+
+      //Datos correspondientes a Domicilio
+      provincia: new FormControl('', [Validators.required]), //
+      departamento: new FormControl({ value: '', disabled: true }, [
+        Validators.required,
+      ]), //
+      localidad: new FormControl({ value: '', disabled: true }, [
+        Validators.required,
+      ]), //
+      cod_postal: new FormControl('', [Validators.required]), //
+      calle: new FormControl('', [Validators.required]), //
+      barrio: new FormControl(''), //
+      numero: new FormControl(''), //
+      cardinalidad: new FormControl(''), //
+      observacion: new FormControl(''), //
+
+      //Ofertas y Turnos
+      ofertas: new FormControl('', [Validators.required]), //
+      turnos: new FormControl('', [Validators.required]), //
+    });
   }
 
   ngOnInit(): void {
@@ -72,6 +111,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
 
   private async loadZonas() {
+    this.zonas = [];
     try {
       this.zonas = await this._zonaService.index();
     } catch (error: any) {
@@ -91,6 +131,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
     }
   }
   private async loadOfertas() {
+    this.ofertas = [];
     try {
       this.ofertas = await this._ofertaService.index();
     } catch (error: any) {
@@ -126,11 +167,91 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.dataSourceTelefonos.data = this.telefonos;
   }
 
-  setearDepartamentos(){
-    this.departamentos = this._ubicacionesService.departamentos(this.provinciaSelected.id);
+  setearDepartamentos() {
+    this.departamentos = this._ubicacionesService.departamentos(
+      this.nuevoEstablecimientoForm.get('provincia')?.value.id
+    );
+    this.nuevoEstablecimientoForm.get('departamento')?.enable();
   }
 
-  setearLocalidades(){
-    this.localidades = this._ubicacionesService.localidades(this.departamentoSelected.id);
+  setearLocalidades() {
+    this.localidades = this._ubicacionesService.localidades(
+      this.nuevoEstablecimientoForm.get('departamento')?.value.id
+    );
+    this.nuevoEstablecimientoForm.get('localidad')?.enable();
   }
+
+  public async agregarEstablecimiento() {
+    let nuevosValoresEstablecimiento = this.removeEmpty(
+      this.nuevoEstablecimientoForm.getRawValue()
+    );
+
+    nuevosValoresEstablecimiento.provincia =
+      nuevosValoresEstablecimiento.provincia.nombre;
+    nuevosValoresEstablecimiento.departamento =
+      nuevosValoresEstablecimiento.departamento.nombre;
+    nuevosValoresEstablecimiento.localidad =
+      nuevosValoresEstablecimiento.localidad.nombre;
+    nuevosValoresEstablecimiento.horario = `${nuevosValoresEstablecimiento.horario_desde}-${nuevosValoresEstablecimiento.horario_hasta}`;
+    nuevosValoresEstablecimiento.telefonos = this.telefonos;
+    delete nuevosValoresEstablecimiento.horario_desde;
+    delete nuevosValoresEstablecimiento.horario_hasta;
+
+    this.nuevoEstablecimientoForm.disable();
+    this.telefonoInput.disable();
+    this.uploading = true;
+    try {
+      let response = await this._establecimientoService.store(
+        nuevosValoresEstablecimiento
+      );
+      if (response) {
+        if (response.errores) {
+          let errorMessage = 'La carga se completó pero con errores:<br>';
+          for (let error of response.errores) {
+            errorMessage = `${errorMessage}<br>${error}`;
+          }
+          await Swal.fire({
+            icon: 'warning',
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: 'Aceptar',
+            title: 'Atención',
+            html: errorMessage,
+          });
+        } else {
+          await Swal.fire({
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+            text: 'Se agregó el establecimiento correctamente',
+            title: 'Agregado',
+          });
+        }
+        this._router.navigate(['establecimientos']);
+      }
+    } catch (error: any) {
+      await Swal.fire({
+        icon: 'error',
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        title: 'Error',
+        text:
+          'Ocurrio un error y no se pudo cargar el nuevo establecimiento. Intenteló nuevamente.' +
+          error.message
+            ? error.message
+            : '',
+      });
+      this._router.navigate(['establecimientos']);
+    }
+  }
+
+  removeEmpty(obj: any) {
+    Object.keys(obj).forEach(k =>
+      (obj[k] && typeof obj[k] === 'object') && this.removeEmpty(obj[k]) ||
+      (!obj[k] && obj[k] !== undefined) && delete obj[k]
+    );
+    return obj;
+  };
+
 }

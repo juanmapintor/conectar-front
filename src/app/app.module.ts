@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
@@ -29,6 +30,10 @@ import { LoginComponent } from './components/login/login.component';
 import { authInterceptorProviders } from './services/helpers/auth.interceptor';
 import { HomeEstablecimientosComponent } from './components/establecimientos/home-establecimientos/home-establecimientos.component';
 import { NuevoEstablecimientoComponent } from './components/establecimientos/nuevo-establecimiento/nuevo-establecimiento.component';
+import { NuevaZonaComponent } from './components/establecimientos/zonas/nueva-zona/nueva-zona.component';
+import { VerZonasComponent } from './components/establecimientos/zonas/ver-zonas/ver-zonas.component';
+import { NuevaOfertaComponent } from './components/establecimientos/ofertas/nueva-oferta/nueva-oferta.component';
+import { VerOfertasComponent } from './components/establecimientos/ofertas/ver-ofertas/ver-ofertas.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +43,10 @@ import { NuevoEstablecimientoComponent } from './components/establecimientos/nue
     LoginComponent,
     HomeEstablecimientosComponent,
     NuevoEstablecimientoComponent,
+    NuevaZonaComponent,
+    VerZonasComponent,
+    NuevaOfertaComponent,
+    VerOfertasComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +69,8 @@ import { NuevoEstablecimientoComponent } from './components/establecimientos/nue
     MatExpansionModule,
     MatSelectModule,
     MatButtonToggleModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],

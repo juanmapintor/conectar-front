@@ -37,13 +37,13 @@
       <mat-card-title>Zonas.</mat-card-title>
       <mat-card-subtitle>Nueva zona</mat-card-subtitle>
       <mat-card-content>
-        <a class="action-button">
+        <button class="action-button" (click)="nuevaZona()">
           <img
             class="action-icon"
             src="../../../../assets/add_circle_outline_black_24dp.svg"
             alt=""
           />
-        </a>
+        </button>
         <p>
           Crea una nueva zona a la que podran pertenecer los establecimientos.
         </p>
@@ -67,13 +67,13 @@
       <mat-card-title>Ofertas.</mat-card-title>
       <mat-card-subtitle>Nueva oferta.</mat-card-subtitle>
       <mat-card-content>
-        <a class="action-button">
+        <button class="action-button" (click)="nuevaOferta()">
           <img
             class="action-icon"
             src="../../../../assets/add_circle_outline_black_24dp.svg"
             alt=""
           />
-        </a>
+        </button>
         <p>Crea una nueva oferta que los establecimientos podran ofrecer.</p>
       </mat-card-content>
     </mat-card>

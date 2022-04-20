@@ -34,7 +34,8 @@
 }
 mat-card {
   margin: 20px;
-  min-width: 300px;
+  min-width: 250px;
+
   flex: 1 1 0;
 }
 mat-card-content {
@@ -45,6 +46,8 @@ mat-card-content {
 }
 
 .action-button {
+  all: unset;
+  cursor: pointer;
   width: 100%;
   max-width: 300px;
   aspect-ratio: 1;

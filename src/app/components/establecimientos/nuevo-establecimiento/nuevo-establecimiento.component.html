@@ -1,7 +1,13 @@
 <div class="full-centered" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-<div class="scrollable-div" [class.handset-padding]="isHandset$ | async" [class.desktop-padding]="!(isHandset$ | async)" *ngIf="!loading">
+<form
+  class="scrollable-div"
+  [class.handset-padding]="isHandset$ | async"
+  [class.desktop-padding]="!(isHandset$ | async)"
+  [formGroup]="nuevoEstablecimientoForm"
+  *ngIf="!loading"
+>
   <mat-card
     [class.card-80]="!(isHandset$ | async)"
     [class.card-100]="isHandset$ | async"
@@ -12,23 +18,35 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>CUE</mat-label>
-          <input matInput placeholder="xxxxxxxxxxx" />
+          <input matInput placeholder="xxxxxxxxxxx" formControlName = "cue"/>
           <mat-hint>Ingrese el CUE del establecimiento.</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Nombre</mat-label>
-          <input matInput placeholder="Nombre" />
+          <input matInput placeholder="Nombre" formControlName = "nombre"/>
           <mat-hint>Ingrese el nombre del establecimiento.</mat-hint>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline">
+          <mat-label>Matrícula</mat-label>
+          <input matInput placeholder="1234..." type="number" formControlName = "matricula"/>
+          <mat-hint>Ingrese la matrícula del establecimiento.</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="mail@establecimiento.com" type="email" formControlName = "mail"/>
+          <mat-hint>Ingrese la direccion de email del establecimiento.</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
           <mat-label>Turnos</mat-label>
-          <mat-select multiple>
-            <mat-option value="1">Mañana</mat-option>
-            <mat-option value="2">Tarde</mat-option>
-            <mat-option value="3">Vespertino</mat-option>
-            <mat-option value="4">Jornada Completa</mat-option>
+          <mat-select multiple formControlName = "turnos">
+            <mat-option [value]="1">Mañana</mat-option>
+            <mat-option [value]="2">Tarde</mat-option>
+            <mat-option [value]="3">Vespertino</mat-option>
+            <mat-option [value]="4">Jornada Completa</mat-option>
           </mat-select>
           <mat-hint
             >Seleccione los turnos que posee el establecimiento.</mat-hint
@@ -36,20 +54,20 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Horario</mat-label>
-          <input matInput type="time" />
+          <input matInput type="time" formControlName = "horario_desde"/>
           <mat-hint>Desde...</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <input matInput type="time" />
+          <input matInput type="time" formControlName = "horario_hasta"/>
           <mat-hint>Hasta...</mat-hint>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Sector</mat-label>
-          <mat-select>
-            <mat-option value="1">Estatal</mat-option>
-            <mat-option value="2">Privado</mat-option>
+          <mat-select formControlName = "sectorID">
+            <mat-option [value]="1">Estatal</mat-option>
+            <mat-option [value]="2">Privado</mat-option>
           </mat-select>
           <mat-hint
             >Seleccione el sector al que pertenece el establecimiento.</mat-hint
@@ -57,11 +75,11 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Nivel</mat-label>
-          <mat-select>
-            <mat-option value="1">Educación inicial</mat-option>
-            <mat-option value="2">Educación primaria</mat-option>
-            <mat-option value="3">Educación secundaria</mat-option>
-            <mat-option value="4">Educación superior</mat-option>
+          <mat-select formControlName = "nivelID">
+            <mat-option [value]="1">Educación inicial</mat-option>
+            <mat-option [value]="2">Educación primaria</mat-option>
+            <mat-option [value]="3">Educación secundaria</mat-option>
+            <mat-option [value]="4">Educación superior</mat-option>
           </mat-select>
           <mat-hint>Seleccione el nivel del establecimiento.</mat-hint>
         </mat-form-field>
@@ -69,26 +87,26 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Modalidad</mat-label>
-          <mat-select>
-            <mat-option value="1">Educación especial.</mat-option>
-            <mat-option value="2"
+          <mat-select formControlName = "modalidadID">
+            <mat-option [value]="1">Educación especial.</mat-option>
+            <mat-option [value]="2"
               >Educación permanente de jóvenes y adultos.</mat-option
             >
-            <mat-option value="3"
+            <mat-option [value]="3"
               >Educación en contextos de encierro.</mat-option
             >
-            <mat-option value="4"
+            <mat-option [value]="4"
               >Educación rural y en áreas de frontera.</mat-option
             >
-            <mat-option value="5"
+            <mat-option [value]="5"
               >Educación domiciliaria y hospitalaria.</mat-option
             >
-            <mat-option value="6"
+            <mat-option [value]="6"
               >Educación en escuelas albergue y albergues.</mat-option
             >
-            <mat-option value="7">Educación intercultural bilingüe.</mat-option>
-            <mat-option value="8">Educación técnico profesional.</mat-option>
-            <mat-option value="9">Educación artística.</mat-option>
+            <mat-option [value]="7">Educación intercultural bilingüe.</mat-option>
+            <mat-option [value]="8">Educación técnico profesional.</mat-option>
+            <mat-option [value]="9">Educación artística.</mat-option>
           </mat-select>
           <mat-hint
             >Seleccione el sector al que pertenece el establecimiento.</mat-hint
@@ -98,11 +116,11 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Ambito</mat-label>
-          <mat-select>
-            <mat-option value="1">Rural</mat-option>
-            <mat-option value="2">Rural aglomerado</mat-option>
-            <mat-option value="3">Rural disperso</mat-option>
-            <mat-option value="4">Urbano</mat-option>
+          <mat-select formControlName = "ambitoID">
+            <mat-option [value]="1">Rural</mat-option>
+            <mat-option [value]="2">Rural aglomerado</mat-option>
+            <mat-option [value]="3">Rural disperso</mat-option>
+            <mat-option [value]="4">Urbano</mat-option>
           </mat-select>
           <mat-hint>Seleccione el ambito del establecimiento.</mat-hint>
         </mat-form-field>
@@ -110,7 +128,7 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Zona</mat-label>
-          <mat-select>
+          <mat-select formControlName = "zonaID">
             <mat-option *ngFor="let zona of zonas" [value]="zona.zonaID">{{
               zona.nombre_zona
             }}</mat-option>
@@ -123,7 +141,7 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Ofertas</mat-label>
-          <mat-select multiple>
+          <mat-select multiple formControlName = "ofertas">
             <mat-option
               *ngFor="let oferta of ofertas"
               [value]="oferta.ofertaID"
@@ -141,6 +159,9 @@
     [class.card-80]="!(isHandset$ | async)"
     [class.card-100]="isHandset$ | async"
   >
+    <mat-card-subtitle
+      >Carga de teléfonos para el establecimiento.</mat-card-subtitle
+    >
     <mat-card-title>Teléfonos.</mat-card-title>
     <mat-card-content>
       <div class="form-row">
@@ -151,14 +172,13 @@
             type="phone"
             placeholder="+5492645..."
             [formControl]="telefonoInput"
-            required
           />
           <mat-icon matSuffix>phone</mat-icon>
           <mat-hint>Ingresa un telefono, luego presione +</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Tipo</mat-label>
-          <mat-select [(ngModel)]="tipoTelefonoSelect">
+          <mat-select [(ngModel)]="tipoTelefonoSelect" [ngModelOptions]="{standalone: true}">
             <mat-option value="fijo">Fijo</mat-option>
             <mat-option value="movil">Movil</mat-option>
           </mat-select>
@@ -170,7 +190,7 @@
           (click)="agregarTelefono()"
           style="margin-bottom: 1.7em"
           [class.card-100]="isHandset$ | async"
-          [disabled]="telefonoInput.invalid && !telefonoInput.touched"
+          [disabled]="!telefonoInput.touched || !telefonoInput.value"
         >
           <mat-icon style="font-size: large; color: white">add</mat-icon>
         </button>
@@ -230,13 +250,14 @@
     [class.card-80]="!(isHandset$ | async)"
     [class.card-100]="isHandset$ | async"
   >
+  <mat-card-subtitle>Dirección del nuevo establecimiento.</mat-card-subtitle>
     <mat-card-title>Dirección.</mat-card-title>
     <mat-card-content>
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Provincias</mat-label>
           <mat-select
-            [(ngModel)]="provinciaSelected"
+            formControlName="provincia"
             (selectionChange)="setearDepartamentos()"
           >
             <mat-option
@@ -250,8 +271,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Departamentos</mat-label>
           <mat-select
-            [(ngModel)]="departamentoSelected"
-            [disabled]="departamentos.length == 0"
+            formControlName="departamento"
             (selectionChange)="setearLocalidades()"
           >
             <mat-option
@@ -265,8 +285,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Localidad</mat-label>
           <mat-select
-            [(ngModel)]="localidadSelected"
-            [disabled]="localidades.length == 0"
+            formControlName="localidad"
           >
             <mat-option
               *ngFor="let localidad of localidades"
@@ -280,28 +299,28 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Código Postal</mat-label>
-          <input matInput placeholder="xxxxxxxxxxx" />
+          <input matInput placeholder="xxxxxxxxxxx" formControlName = "cod_postal"/>
           <mat-hint>Ingrese el código postal.</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Calle</mat-label>
-          <input matInput placeholder="Calle..." />
+          <input matInput placeholder="Calle..." formControlName = "calle"/>
           <mat-hint>Ingrese el nombre de la calle.</mat-hint>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Numeracion</mat-label>
-          <input matInput placeholder="1234.." />
+          <input matInput placeholder="1234.." type="text" formControlName="numero"/>
           <mat-hint>Ingrese la altura del establecimiento.</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Cardinalidad</mat-label>
-          <mat-select>
-            <mat-option value="1">Norte</mat-option>
-            <mat-option value="2">Sur</mat-option>
-            <mat-option value="3">Este</mat-option>
-            <mat-option value="4">Oeste</mat-option>
+          <mat-select formControlName = "cardinalidad">
+            <mat-option value="Norte">Norte</mat-option>
+            <mat-option value="Sur">Sur</mat-option>
+            <mat-option value="Este">Este</mat-option>
+            <mat-option value="Oeste">Oeste</mat-option>
           </mat-select>
           <mat-hint>Seleccione el ambito del establecimiento.</mat-hint>
         </mat-form-field>
@@ -309,16 +328,20 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Barrio</mat-label>
-          <input matInput placeholder="Barrio..." />
+          <input matInput placeholder="Barrio..." type="text" formControlName ="barrio"/>
           <mat-hint>Ingrese el barrio.</mat-hint>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Obervaciones</mat-label>
-          <textarea matInput></textarea>
+          <textarea matInput formControlName = "observacion"></textarea>
         </mat-form-field>
       </div>
+      <div class="form-row" style="margin-top: 15px;">
+        <button mat-raised-button color="primary" style="margin-left: auto;" (click)="agregarEstablecimiento()" [disabled]="nuevoEstablecimientoForm.invalid">Agregar</button>
+      </div>
+      <mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="uploading"></mat-progress-bar>
     </mat-card-content>
   </mat-card>
-</div>
+</form>

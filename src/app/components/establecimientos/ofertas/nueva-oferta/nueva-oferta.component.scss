@@ -1,0 +1,16 @@
+.form-row {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  mat-form-field {
+    min-width: 250px;
+
+    margin-right: 10px;
+    min-width: 250px;
+
+    flex: 1 1 0;
+  }
+  
