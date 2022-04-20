@@ -1,15 +1,19 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { EstablecimientoCompleto } from 'src/app/models/establecimiento';
-import { EstablecimientoService } from 'src/app/services/establecimiento.service';
-
+import { map, Observable, shareReplay } from 'rxjs';
 @Component({
   selector: 'app-bienvenida',
   templateUrl: './bienvenida.component.html',
   styleUrls: ['./bienvenida.component.scss']
 })
 export class BienvenidaComponent implements OnInit {
-
-  constructor() { }
+  isHandset$: Observable<boolean> = this.breakpointObserver
+  .observe(Breakpoints.Handset)
+  .pipe(
+    map((result) => result.matches),
+    shareReplay()
+  );
+constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit(): void {
   }

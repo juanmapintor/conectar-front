@@ -35,6 +35,10 @@ import { VerZonasComponent } from './components/establecimientos/zonas/ver-zonas
 import { NuevaOfertaComponent } from './components/establecimientos/ofertas/nueva-oferta/nueva-oferta.component';
 import { VerOfertasComponent } from './components/establecimientos/ofertas/ver-ofertas/ver-ofertas.component';
 import { VerEstablecimientosComponent } from './components/establecimientos/ver-establecimientos/ver-establecimientos.component';
+import { HomeDispositivosComponent } from './components/dispositivos/home-dispositivos/home-dispositivos.component';
+import { NuevoDispositivoComponent } from './components/dispositivos/nuevo-dispositivo/nuevo-dispositivo.component';
+import { VerDispositivosComponent } from './components/dispositivos/ver-dispositivos/ver-dispositivos.component';
+import { HomePersonasComponent } from './components/personas/home-personas/home-personas.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,10 @@ import { VerEstablecimientosComponent } from './components/establecimientos/ver-
     NuevaOfertaComponent,
     VerOfertasComponent,
     VerEstablecimientosComponent,
+    HomeDispositivosComponent,
+    NuevoDispositivoComponent,
+    VerDispositivosComponent,
+    HomePersonasComponent,
   ],
   imports: [
     BrowserModule,
