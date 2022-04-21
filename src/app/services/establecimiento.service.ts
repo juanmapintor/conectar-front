@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs';
 export class EstablecimientoService {
   constructor(private _http: HttpClient) {}
 
-  public async index(): Promise<any> {
+  public async index(page: number): Promise<any> {
     try {
       let response: any = await firstValueFrom(
         this._http.get(GLOBAL.API_URL + 'establecimientos', GLOBAL.JSON_HEADERS)

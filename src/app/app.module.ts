@@ -40,6 +40,7 @@ import { NuevoDispositivoComponent } from './components/dispositivos/nuevo-dispo
 import { VerDispositivosComponent } from './components/dispositivos/ver-dispositivos/ver-dispositivos.component';
 import { HomePersonasComponent } from './components/personas/home-personas/home-personas.component';
 import { SvgImgComponent } from './components/helpers/svg-img/svg-img.component';
+import { NuevoResponsableComponent } from './components/personas/responsables/nuevo-responsable/nuevo-responsable.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { SvgImgComponent } from './components/helpers/svg-img/svg-img.component'
     VerDispositivosComponent,
     HomePersonasComponent,
     SvgImgComponent,
+    NuevoResponsableComponent,
   ],
   imports: [
     BrowserModule,
