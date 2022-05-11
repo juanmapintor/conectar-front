@@ -1,6 +1,6 @@
 export class Zona {
   constructor(
-    public zonaID: number | null ,
+    public zonaID: number,
     public nombre_zona: string,
     public apellido_supervisor: string,
     public nombre_supervisor: string,

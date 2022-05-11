@@ -1,7 +1,6 @@
 export class Oferta {
     constructor(
-        public ofertaID: number | null ,
-        public oferta: string){
-
-        }
+        public ofertaID: number,
+        public oferta: string
+    ) {}
 }

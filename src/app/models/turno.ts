@@ -1,3 +1,6 @@
 export class Turno {
-  constructor(public turnoID: number | null, public turno: string) {}
+  constructor(
+    public turnoID: number,
+    public turno: string
+  ) {}
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Page } from '../models/page';
+import { EstablecimientoDetalles, EstablecimientoLista } from '../models/establecimiento';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
 export class EstablecimientoService {
   constructor(private _http: HttpClient) { }
 
-  public async index(page: number): Promise<any> {
+  public async index(page: number): Promise<Page<EstablecimientoLista>> {
     try {
       let options = {
         headers: GLOBAL.JSON_HEADERS.headers,
@@ -18,27 +20,28 @@ export class EstablecimientoService {
       let response: any = await firstValueFrom(
         this._http.get(GLOBAL.API_URL + 'establecimientos', options)
       );
-      return response;
+      return <Page<EstablecimientoLista>>response;
     } catch (error) {
       throw error;
     }
   }
 
 
-  public async show(establecimientoID: number): Promise<any> {
+  public async show(establecimientoID: number): Promise<EstablecimientoDetalles> {
     try {
       let establecimiento: any = await firstValueFrom(
         this._http.get(GLOBAL.API_URL + `establecimientos/${establecimientoID}`, GLOBAL.JSON_HEADERS)
       );
-      return establecimiento;
+      return <EstablecimientoDetalles>establecimiento;
     } catch (error) {
       throw error;
     }
   }
 
   public async store(nuevaEstablecimientoCompleto: any): Promise<any> {
+    console.log(nuevaEstablecimientoCompleto);
     try {
-      nuevaEstablecimientoCompleto.establecimientoID = null;
+      nuevaEstablecimientoCompleto.establecimientoID = -1;
       let establecimiento: any = await firstValueFrom(
         this._http.post(
           GLOBAL.API_URL + 'establecimientos',
@@ -54,7 +57,7 @@ export class EstablecimientoService {
   /*
     public async update(establecimientoID: number, establecimientoActualizada: any): Promise {
       try {
-        establecimientoActualizada.establecimientoID = null;
+        establecimientoActualizada.establecimientoID = -1;
         let establecimiento: any = await firstValueFrom(
           this._http.put(
             GLOBAL.API_URL + `establecimientos/${establecimientoID}`,

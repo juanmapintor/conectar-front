@@ -48,7 +48,7 @@ export class OfertaService {
 
   public async store(nuevaOferta: Oferta): Promise<Oferta> {
     try {
-      nuevaOferta.ofertaID = null;
+      nuevaOferta.ofertaID = -1;
       let oferta: any = await firstValueFrom(
         this._http.post(
           GLOBAL.API_URL + 'ofertas',
@@ -67,7 +67,7 @@ export class OfertaService {
 
   public async update(ofertaID: number, ofertaActualizada: Oferta): Promise<Oferta> {
     try {
-      ofertaActualizada.ofertaID = null;
+      ofertaActualizada.ofertaID = -1;
       let oferta: any = await firstValueFrom(
         this._http.put(
           GLOBAL.API_URL + `ofertas/${ofertaID}`,

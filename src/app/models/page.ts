@@ -1,8 +1,9 @@
 export class Page<Type> {
     constructor(
-        current_page: number,
-        data: Type[],
-        last_page: number
+        public total: number,
+        public per_page: number,
+        public current_page: number,
+        public data: Type[],
     ){
     }
 }

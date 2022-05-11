@@ -1,3 +1,6 @@
 export class Modalidad {
-  constructor(public modalidadID: number | null , public modalidad: string) {}
+  constructor(
+    public modalidadID: number, 
+    public modalidad: string
+  ) {}
 }

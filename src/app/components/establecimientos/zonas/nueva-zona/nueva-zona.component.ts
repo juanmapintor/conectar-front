@@ -41,7 +41,7 @@ export class NuevaZonaComponent implements OnInit {
   public async agregarZona() {
     let rawDatos = this.nuevaZonaForm.getRawValue();
     let nuevaZona = new Zona(
-      null,
+      -1,
       rawDatos.nombre,
       rawDatos.apellido_supervisor,
       rawDatos.nombre_supervisor,

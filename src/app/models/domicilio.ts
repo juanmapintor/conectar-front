@@ -1,14 +1,16 @@
 export class Domicilio {
   constructor(
-    domicilioID: number | null ,
-    provincia: string,
-    departamento: string,
-    cod_postal: number ,
-    localidad: string,
-    barrio: string,
-    calle: string,
-    numero: number ,
-    cardinalidad: string,
-    observacion: string
-  ) {}
+    public domicilioID: number,
+    public provincia: string,//
+    public departamento: string,//
+    public cod_postal: number,
+    public localidad: string,//
+    public barrio: string,
+    public calle: string,//
+    public numero: number,//
+    public cardinalidad: string,//
+    public observacion: string,
+    public lat: number,
+    public lng: number
+  ) { }
 }
