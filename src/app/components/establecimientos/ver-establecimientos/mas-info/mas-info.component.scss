@@ -1,0 +1,53 @@
+:host {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+
+:host>.row:last-of-type {
+    margin-bottom: 15px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+}
+
+.field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 250px;
+    padding-right: 10px;
+    flex: 1 1 0;
+    margin-top: 10px;
+    border-bottom: 1px solid #0000001f;
+    border-right: 1px solid #0000001f;
+    padding-top: 10px;
+}
+
+.margin-not-handset {
+    margin-right: 20px;
+}
+
+.row>.field:last-of-type {
+    margin-right: 0 !important;
+}
+
+p.main {
+    font-weight: bold;
+}
+
+p.info {
+    text-align: right;
+}
+
+.static-container {
+    width: calc(100% - 1px);
+    max-width: calc(100% - 1px);
+    height: 350px;
+    min-height: 350px;
+}

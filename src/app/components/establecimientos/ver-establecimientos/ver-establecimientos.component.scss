@@ -9,19 +9,16 @@
   overflow-y: hidden;
 }
 
-.full-centered {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .scrollable-div {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   overflow-y: scroll;
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none;
 }
 
 .loading {
@@ -39,16 +36,6 @@
 .desktop-padding {
   padding-top: 200px;
 }
-.scrollable-div::-webkit-scrollbar {
-  display: none;
-}
-
-.form-row {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-}
 
 mat-card {
   margin-top: 20px;
@@ -64,4 +51,25 @@ mat-card:last-of-type {
 
 .card-100 {
   width: 95%;
+}
+
+table {
+  overflow-x: auto;
+  max-width: 100% !important;
+  width: 100%;
+}
+
+tr.establecimiento-detalle-row {
+  height: 0;
+}
+
+.establecimiento-row td {
+  border-bottom-width: 0;
+  padding: 10px 0 10px 24px;
+}
+
+.division-detalle-establecimiento {
+  overflow: hidden;
+  display: flex;
+  align-items: baseline;
 }

@@ -1,23 +1,10 @@
-<div
-  [class.handset-padding]="isHandset$ | async"
-  [class.desktop-padding]="!(isHandset$ | async)"
-  class="scrollable-div"
->
-  <mat-card
-    [class.card-80]="!(isHandset$ | async)"
-    [class.card-100]="isHandset$ | async"
-  >
+<div [class.handset-padding]="isHandset$ | async" [class.desktop-padding]="!(isHandset$ | async)"
+  class="scrollable-div">
+  <mat-card [class.card-80]="!(isHandset$ | async)" [class.card-100]="isHandset$ | async">
     <mat-card-title>Establecimientos.</mat-card-title>
-    <mat-card-subtitle
-      >Lista de los establecimientos actualmente cargados.</mat-card-subtitle
-    >
+    <mat-card-subtitle>Lista de los establecimientos actualmente cargados.</mat-card-subtitle>
     <mat-card-content>
-      <table
-        mat-table
-        [dataSource]="dataSourceEstablecimientos"
-        class="mat-elevation-z8"
-        style="margin-top: 20px; margin-bottom: 20px; width: 100%"
-      >
+      <table mat-table [dataSource]="dataSourceEstablecimientos" multiTemplateDataRows class="mat-elevation-z8">
         <ng-container matColumnDef="cue">
           <th mat-header-cell *matHeaderCellDef>CUE</th>
           <td mat-cell *matCellDef="let element">{{ element.cue }}</td>
@@ -38,30 +25,42 @@
 
         <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef></th>
-          <td
-            mat-cell
-            *matCellDef="let element; let i = index"
-            style="text-align: right"
-          >
-            <button mat-icon-button color="warn" [class.hidden]="loading">
-              <mat-icon>delete</mat-icon>
+          <td mat-cell *matCellDef="let element; let i = dataIndex;" (click)="expandirRow(i, element)"
+            style="text-align: right">
+            <button mat-icon-button color="primary" [class.hidden]="loading">
+              <mat-icon *ngIf="indiceExpandido != i">visibility</mat-icon>
+              <mat-icon *ngIf="indiceExpandido == i">visibility_off</mat-icon>
             </button>
-            <button mat-icon-button color="warn" [class.hidden]="loading">
+            <button mat-icon-button color="accent" [class.hidden]="loading" *ngIf="!(isHandset$ | async)">
               <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" [class.hidden]="loading" *ngIf="!(isHandset$ | async)">
+              <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>
 
-        <tr
-          mat-header-row
-          *matHeaderRowDef="displayedColumnsEstablecimientos"
-        ></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumnsEstablecimientos"
-          [class.loading]="loading"
-        ></tr>
+        <ng-container matColumnDef="detalleEstablecimiento">
+          <td mat-cell *matCellDef="let element; let i = dataIndex;"
+            [attr.colspan]="(!(isHandset$ | async) ? displayedColumnsEstablecimientosFull :  displayedColumnsEstablecimientosHandset).length">
+            <div class="division-detalle-establecimiento"
+              [@detailExpand]="indiceExpandido == i ? 'expanded' : 'collapsed'">
+              <mat-spinner style="margin: auto" *ngIf="loadingEstablecimientos[i]"></mat-spinner>
+              <app-mas-info [establecimientoDetalles]="establecimientoDetalles" *ngIf="!loadingEstablecimientos[i] && establecimientoDetalles"></app-mas-info>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+          *matHeaderRowDef="!(isHandset$ | async) ? displayedColumnsEstablecimientosFull :  displayedColumnsEstablecimientosHandset">
+        </tr>
+        <tr mat-row
+          *matRowDef="let element; columns: !(isHandset$ | async) ? displayedColumnsEstablecimientosFull :  displayedColumnsEstablecimientosHandset"
+          class="establecimiento-row" [class.loading]="loading"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['detalleEstablecimiento']" class="establecimiento-detalle-row"></tr>
       </table>
+
+
       <mat-paginator hidePageSize="true"></mat-paginator>
       <mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="loading"></mat-progress-bar>
     </mat-card-content>
