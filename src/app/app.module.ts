@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +21,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { AppComponent } from './app.component';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
@@ -42,6 +44,7 @@ import { VerDispositivosComponent } from './components/dispositivos/ver-disposit
 import { HomePersonasComponent } from './components/personas/home-personas/home-personas.component';
 import { SvgImgComponent } from './components/helpers/svg-img/svg-img.component';
 import { NuevoResponsableComponent } from './components/personas/responsables/nuevo-responsable/nuevo-responsable.component';
+import { MasInfoComponent } from './components/establecimientos/ver-establecimientos/mas-info/mas-info.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,7 @@ import { NuevoResponsableComponent } from './components/personas/responsables/nu
     HomePersonasComponent,
     SvgImgComponent,
     NuevoResponsableComponent,
+    MasInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +75,7 @@ import { NuevoResponsableComponent } from './components/personas/responsables/nu
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -86,7 +91,9 @@ import { NuevoResponsableComponent } from './components/personas/responsables/nu
     MatButtonToggleModule,
     MatTableModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule,
+    GoogleMapsModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],

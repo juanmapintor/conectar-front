@@ -33,9 +33,9 @@ $conectarpalette: (
       200 : #000000,
       300 : #000000,
       400 : #000000,
-      500 : #000000,
-      600 : #000000,
-      700 : #000000,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
       800 : #ffffff,
       900 : #ffffff,
       A100 : #000000,
@@ -45,36 +45,36 @@ $conectarpalette: (
   )
 );
 $conectarsecondarypalette: (
-    50 : #edeeef,
-    100 : #d3d6d8,
-    200 : #b6babe,
-    300 : #989ea4,
-    400 : #828a91,
-    500 : #6c757d,
-    600 : #646d75,
-    700 : #59626a,
-    800 : #4f5860,
-    900 : #3d454d,
-    A100 : #a9d3fd,
-    A200 : #77b9fc,
-    A400 : #41a0ff,
-    A700 : #2793ff,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #ffffff,
-    )
+  50 : #fdefe1,
+  100 : #fad8b4,
+  200 : #f7be82,
+  300 : #f4a34f,
+  400 : #f1902a,
+  500 : #ef7c04,
+  600 : #ed7403,
+  700 : #eb6903,
+  800 : #e85f02,
+  900 : #e44c01,
+  A100 : #ffffff,
+  A200 : #ffe2d8,
+  A400 : #ffbda5,
+  A700 : #ffaa8b,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
+      800 : #ffffff,
+      900 : #ffffff,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
 );
 $conectarwarnpalette: (
     50 : #fbe7e9,
@@ -110,7 +110,7 @@ $conectarwarnpalette: (
 );
 
 $conectar-front-primary: mat.define-palette($conectarpalette);
-$conectar-front-accent: mat.define-palette($conectarsecondarypalette, A200, A100, A400);
+$conectar-front-accent: mat.define-palette($conectarsecondarypalette);
 
 // The warn palette is optional (defaults to red).
 $conectar-front-warn: mat.define-palette($conectarwarnpalette);
