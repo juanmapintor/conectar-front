@@ -8,7 +8,7 @@ import { Oferta } from '../models/oferta';
   providedIn: 'root',
 })
 export class OfertaService {
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) { }
 
   public async index(): Promise<Oferta[]> {
     try {
@@ -16,13 +16,15 @@ export class OfertaService {
         this._http.get(GLOBAL.API_URL + 'ofertas', GLOBAL.JSON_HEADERS)
       );
       let ofertas: Oferta[] = [];
-      for (let oferta of response) {
-        ofertas.push(
-          new Oferta(
-            oferta.ofertaID,
-            oferta.oferta
-          )
-        );
+      if (response) {
+        for (let oferta of response) {
+          ofertas.push(
+            new Oferta(
+              oferta.ofertaID,
+              oferta.oferta
+            )
+          );
+        }
       }
       return ofertas;
     } catch (error) {

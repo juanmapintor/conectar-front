@@ -8,7 +8,7 @@ import { Zona } from '../models/zona';
   providedIn: 'root',
 })
 export class ZonaService {
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) { }
 
   public async index(): Promise<Zona[]> {
     try {
@@ -16,18 +16,22 @@ export class ZonaService {
         this._http.get(GLOBAL.API_URL + 'zonas', GLOBAL.JSON_HEADERS)
       );
       let zonas: Zona[] = [];
-      for (let zona of response) {
-        zonas.push(
-          new Zona(
-            zona.zonaID,
-            zona.nombre_zona,
-            zona.apellido_supervisor,
-            zona.nombre_supervisor,
-            zona.mail_supervisor,
-            zona.telefono_supervisor
-          )
-        );
+      if (response) {
+        for (let zona of response) {
+          zonas.push(
+            new Zona(
+              zona.zonaID,
+              zona.nombre_zona,
+              zona.apellido_supervisor,
+              zona.nombre_supervisor,
+              zona.mail_supervisor,
+              zona.telefono_supervisor
+            )
+          );
+        }
       }
+
+
       return zonas;
     } catch (error) {
       throw error;

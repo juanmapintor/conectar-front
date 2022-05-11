@@ -1,3 +1,3 @@
 export class Nivel {
-  constructor(nivelID: number | null , nivel: string) {}
+  constructor(public nivelID: number | null , public nivel: string) {}
 }

@@ -1,3 +1,3 @@
 export class Modalidad {
-  constructor(modalidadID: number | null , modalidad: string) {}
+  constructor(public modalidadID: number | null , public modalidad: string) {}
 }

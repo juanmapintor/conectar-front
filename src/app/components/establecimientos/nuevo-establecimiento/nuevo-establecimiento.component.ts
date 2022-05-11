@@ -18,6 +18,15 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { UbicacionesService } from 'src/app/services/ubicaciones.service';
 import { EstablecimientoService } from 'src/app/services/establecimiento.service';
+import { Ambito } from 'src/app/models/ambito';
+import { Modalidad } from 'src/app/models/modalidad';
+import { Nivel } from 'src/app/models/nivel';
+import { Sector } from 'src/app/models/sector';
+import { Turno } from 'src/app/models/turno';
+import { OpcionesEstablecimientoServiceService } from 'src/app/services/opciones-establecimiento-service.service';
+import { JSONHelper } from 'src/app/services/helpers/jsonhelper.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
 
 @Component({
   selector: 'app-nuevo-establecimiento',
@@ -32,11 +41,26 @@ export class NuevoEstablecimientoComponent implements OnInit {
       shareReplay()
     );
 
-  loading = true;
   uploading = false;
+
+  loadingZonas = true;
+  loadingOfertas = true;
+  loadingAmbitos = true;
+  loadingModalidades = true;
+  loadingNiveles = true;
+  loadingSectores = true;
+  loadingTurnos = true;
+
 
   zonas: Zona[] = [];
   ofertas: Oferta[] = [];
+
+  ambitos: Ambito[] = [];
+  modalidades: Modalidad[] = [];
+  niveles: Nivel[] = [];
+  sectores: Sector[] = [];
+  turnos: Turno[] = [];
+
 
   provincias: any[] = [];
   departamentos: any[] = [];
@@ -47,7 +71,6 @@ export class NuevoEstablecimientoComponent implements OnInit {
   telefonos: Telefono[] = [];
   dataSourceTelefonos = new MatTableDataSource<Telefono>();
   displayedColumnsTelefonos: string[] = [
-    //'orden',
     'telefono',
     'tipo',
     'acciones',
@@ -57,8 +80,10 @@ export class NuevoEstablecimientoComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    public dialog: MatDialog,
     private _zonaService: ZonaService,
     private _ofertaService: OfertaService,
+    private _opcionesEstablecimientoService: OpcionesEstablecimientoServiceService,
     private _ubicacionesService: UbicacionesService,
     private _establecimientoService: EstablecimientoService,
     private _formBuilder: FormBuilder,
@@ -67,18 +92,17 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.provincias = this._ubicacionesService.provincias();
     this.nuevoEstablecimientoForm = this._formBuilder.group({
       //Datos correspondientes a Establecimiento
-      cue: new FormControl('', [Validators.required]), //
-      nombre: new FormControl('', [Validators.required]), //
-      sectorID: new FormControl('', [Validators.required]), //
-      modalidadID: new FormControl('', [Validators.required]), //
-      ambitoID: new FormControl('', [Validators.required]), //
-      nivelID: new FormControl('', [Validators.required]), //
-      zonaID: new FormControl('', [Validators.required]), //
-      matricula: new FormControl('', [Validators.min(1)]), //
-      mail: new FormControl('', [Validators.email]), //
-      horario_desde: new FormControl(''), //
-      horario_hasta: new FormControl(''), //
-
+      cue: new FormControl('', [Validators.required]),
+      nombre: new FormControl('', [Validators.required]),
+      sectorID: new FormControl('', [Validators.required]),
+      modalidadID: new FormControl('', [Validators.required]),
+      ambitoID: new FormControl('', [Validators.required]),
+      nivelID: new FormControl('', [Validators.required]),
+      zonaID: new FormControl('', [Validators.required]),
+      matricula: new FormControl('', [Validators.min(1)]),
+      mail: new FormControl('', [Validators.email]),
+      horario_desde: new FormControl(''),
+      horario_hasta: new FormControl(''),
       //Datos correspondientes a Domicilio
       provincia: new FormControl('', [Validators.required]), //
       departamento: new FormControl({ value: '', disabled: true }, [
@@ -105,15 +129,19 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
 
   private async load() {
-    await this.loadZonas();
-    await this.loadOfertas();
-    this.loading = false;
+    this.loadZonas();
+    this.loadOfertas();
+    this.loadOpciones();
   }
 
   private async loadZonas() {
+    this.loadingZonas = true;
+    this.nuevoEstablecimientoForm.disable();
     this.zonas = [];
     try {
       this.zonas = await this._zonaService.index();
+      this.loadingZonas = false;
+      this.nuevoEstablecimientoForm.enable();
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -131,9 +159,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
     }
   }
   private async loadOfertas() {
+    this.loadingOfertas = true;
+    this.nuevoEstablecimientoForm.disable();
     this.ofertas = [];
     try {
       this.ofertas = await this._ofertaService.index();
+      this.loadingOfertas = false;
+      this.nuevoEstablecimientoForm.enable();
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -150,6 +182,128 @@ export class NuevoEstablecimientoComponent implements OnInit {
         }).then(() => this._router.navigate(['establecimientos']));
     }
   }
+  private loadOpciones(){
+    this.loadAmbitos();
+    this.loadModalidades();
+    this.loadNiveles();
+    this.loadSectores();
+    this.loadTurnos();
+  }
+  private async loadAmbitos() {
+    this.loadingAmbitos = true;
+    this.nuevoEstablecimientoForm.disable();
+    this.ambitos = [];
+    try {
+      this.ambitos = await this._opcionesEstablecimientoService.indexAmbito();
+      this.loadingAmbitos = false;
+      this.nuevoEstablecimientoForm.enable();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: 'No se pudo listar los ambitos para cargar nuevos establecimientos.<br> Pongase en contacto con el administrador del sistema.',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        showCloseButton: false,
+        showConfirmButton: false,
+      }).then(() => this._router.navigate(['establecimientos']));
+    }
+  }
+  private async loadModalidades() {
+    this.loadingModalidades = true;
+    this.nuevoEstablecimientoForm.disable();
+    this.modalidades = [];
+    try {
+      this.modalidades = await this._opcionesEstablecimientoService.indexModalidad();
+      this.loadingModalidades = false;
+      this.nuevoEstablecimientoForm.enable();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: 'No se pudo listar las modalidades para cargar nuevos establecimientos.<br> Pongase en contacto con el administrador del sistema.',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        showCloseButton: false,
+        showConfirmButton: false,
+      }).then(() => this._router.navigate(['establecimientos']));
+    }
+  }
+  private async loadNiveles() {
+    this.loadingNiveles = true;
+    this.nuevoEstablecimientoForm.disable();
+    this.niveles = [];
+    try {
+      this.niveles = await this._opcionesEstablecimientoService.indexNivel();
+      this.loadingNiveles = false;
+      this.nuevoEstablecimientoForm.enable();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: 'No se pudo listar los niveles para cargar nuevos establecimientos.<br> Pongase en contacto con el administrador del sistema.',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        showCloseButton: false,
+        showConfirmButton: false,
+      }).then(() => this._router.navigate(['establecimientos']));
+    }
+  }
+  private async loadSectores() {
+    this.loadingSectores = true;
+    this.nuevoEstablecimientoForm.disable();
+    this.sectores = [];
+    try {
+      this.sectores = await this._opcionesEstablecimientoService.indexSector();
+      this.loadingSectores = false;
+      this.nuevoEstablecimientoForm.enable();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: 'No se pudo listar los sectores para cargar nuevos establecimientos.<br> Pongase en contacto con el administrador del sistema.',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        showCloseButton: false,
+        showConfirmButton: false,
+      }).then(() => this._router.navigate(['establecimientos']));
+    }
+  }
+  private async loadTurnos() {
+    this.loadingTurnos = true;
+    this.nuevoEstablecimientoForm.disable();
+    this.turnos = [];
+    try {
+      this.turnos = await this._opcionesEstablecimientoService.indexTurno();
+      this.loadingTurnos = false;
+      this.nuevoEstablecimientoForm.enable();
+    } catch (error: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: 'No se pudo listar los turnos para cargar nuevos establecimientos.<br> Pongase en contacto con el administrador del sistema.',
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        cancelButtonText: 'Aceptar',
+        showCloseButton: false,
+        showConfirmButton: false,
+      }).then(() => this._router.navigate(['establecimientos']));
+    }
+  }
 
   agregarTelefono() {
     let telefono = {
@@ -160,6 +314,20 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.dataSourceTelefonos.data = this.telefonos;
     this.tipoTelefonoSelect = 'fijo';
     this.telefonoInput.reset();
+  }
+
+  agregarZona() {
+    const dialogRef = this.dialog.open(NuevaZonaComponent);
+    dialogRef.afterClosed().subscribe({
+      next: async () => {
+        this.loadingZonas = true;
+        this.nuevoEstablecimientoForm.disable();
+        await this.loadZonas();
+        this.loadingZonas = false;
+        this.nuevoEstablecimientoForm.enable();
+
+      }
+    })
   }
 
   eliminarTelefono(index: number) {
@@ -182,7 +350,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
 
   public async agregarEstablecimiento() {
-    let nuevosValoresEstablecimiento = this.removeEmpty(
+    let nuevosValoresEstablecimiento = JSONHelper.removeEmpty(
       this.nuevoEstablecimientoForm.getRawValue()
     );
 
@@ -238,20 +406,16 @@ export class NuevoEstablecimientoComponent implements OnInit {
         title: 'Error',
         text:
           'Ocurrio un error y no se pudo cargar el nuevo establecimiento. Intenteló nuevamente.' +
-          error.message
+            error.message
             ? error.message
             : '',
       });
       this._router.navigate(['establecimientos']);
     }
   }
-
-  removeEmpty(obj: any) {
-    Object.keys(obj).forEach(k =>
-      (obj[k] && typeof obj[k] === 'object') && this.removeEmpty(obj[k]) ||
-      (!obj[k] && obj[k] !== undefined) && delete obj[k]
-    );
-    return obj;
-  };
+  
+  loading() : boolean {
+    return this.loadingAmbitos || this.loadingModalidades || this.loadingNiveles || this.loadingOfertas || this.loadingSectores || this.loadingTurnos || this.loadingZonas;
+  }
 
 }

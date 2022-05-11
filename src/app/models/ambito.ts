@@ -1,3 +1,3 @@
 export class Ambito {
-  constructor(ambitoID: number | null , ambito: string) {}
+  constructor(public ambitoID: number | null , public ambito: string) {}
 }
