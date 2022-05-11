@@ -27,7 +27,7 @@ export class NuevaOfertaComponent implements OnInit {
   public async agregarOferta() {
     let rawDatos = this.nuevaOfertaControl.value;
     let nuevaOferta = new Oferta(
-      null,
+      -1,
       rawDatos
     );
     this.loading = true;
