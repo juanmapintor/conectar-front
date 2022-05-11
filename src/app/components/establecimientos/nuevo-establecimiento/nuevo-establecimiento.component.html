@@ -94,7 +94,7 @@
           <mat-hint>Seleccione la zona a la que pertenece establecimiento.</mat-hint>
         </mat-form-field>
         <button mat-raised-button color="accent" (click)="agregarZona()" style="margin-bottom: 1.7em"
-          [class.card-100]="isHandset$ | async" [disabled]="!nuevoEstablecimientoForm.get('zonaID')?.touched">
+          [class.card-100]="isHandset$ | async">
           <mat-icon style="font-size: large; color: white">add</mat-icon>
         </button>
       </div>
@@ -106,8 +106,8 @@
           </mat-select>
           <mat-hint>Seleccione las ofertas que el establecimiento posee.</mat-hint>
         </mat-form-field>
-        <button mat-raised-button color="accent" (click)="agregarTelefono()" style="margin-bottom: 1.7em"
-          [class.card-100]="isHandset$ | async" [disabled]="!telefonoInput.touched || !telefonoInput.value">
+        <button mat-raised-button color="accent" (click)="agregarOferta()" style="margin-bottom: 1.7em"
+          [class.card-100]="isHandset$ | async">
           <mat-icon style="font-size: large; color: white">add</mat-icon>
         </button>
       </div>

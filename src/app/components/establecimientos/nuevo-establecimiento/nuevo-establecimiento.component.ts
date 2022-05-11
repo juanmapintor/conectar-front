@@ -27,6 +27,7 @@ import { OpcionesEstablecimientoServiceService } from 'src/app/services/opciones
 import { JSONHelper } from 'src/app/services/helpers/jsonhelper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
+import { NuevaOfertaComponent } from '../ofertas/nueva-oferta/nueva-oferta.component';
 
 @Component({
   selector: 'app-nuevo-establecimiento',
@@ -142,6 +143,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.zonas = await this._zonaService.index();
       this.loadingZonas = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -166,6 +168,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.ofertas = await this._ofertaService.index();
       this.loadingOfertas = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -197,6 +200,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.ambitos = await this._opcionesEstablecimientoService.indexAmbito();
       this.loadingAmbitos = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -220,6 +224,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.modalidades = await this._opcionesEstablecimientoService.indexModalidad();
       this.loadingModalidades = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -243,6 +248,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.niveles = await this._opcionesEstablecimientoService.indexNivel();
       this.loadingNiveles = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -266,6 +272,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.sectores = await this._opcionesEstablecimientoService.indexSector();
       this.loadingSectores = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -289,6 +296,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
       this.turnos = await this._opcionesEstablecimientoService.indexTurno();
       this.loadingTurnos = false;
       this.nuevoEstablecimientoForm.enable();
+        
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -325,7 +333,20 @@ export class NuevoEstablecimientoComponent implements OnInit {
         await this.loadZonas();
         this.loadingZonas = false;
         this.nuevoEstablecimientoForm.enable();
-
+        
+      }
+    })
+  }
+  agregarOferta() {
+    const dialogRef = this.dialog.open(NuevaOfertaComponent);
+    dialogRef.afterClosed().subscribe({
+      next: async () => {
+        this.loadingOfertas = true;
+        this.nuevoEstablecimientoForm.disable();
+        await this.loadOfertas();
+        this.loadingOfertas = false;
+        this.nuevoEstablecimientoForm.enable();
+        
       }
     })
   }
