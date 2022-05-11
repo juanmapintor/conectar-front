@@ -24,6 +24,14 @@
   overflow-y: scroll;
 }
 
+.loading {
+  opacity: 0.3;
+}
+
+.hidden {
+  opacity: 0;
+}
+
 .handset-padding {
   padding-top: 50px;
 }
