@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -85,6 +86,7 @@ import { NuevoResponsableComponent } from './components/personas/responsables/nu
     MatButtonToggleModule,
     MatTableModule,
     MatDialogModule,
+    MatPaginatorModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
