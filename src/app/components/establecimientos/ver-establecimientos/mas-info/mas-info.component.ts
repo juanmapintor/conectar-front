@@ -19,13 +19,13 @@ export class MasInfoComponent implements OnInit {
 
   @Input('establecimientoDetalles') establecimientoDetalles!: EstablecimientoDetalles;
   center: google.maps.LatLngLiteral = {
-    lat: -40,
-    lng: -80
+    lat: -34.6989,
+    lng: -64.7597
   }
   marker = {
     position: {
-      lat: -40,
-      lng: -80,
+      lat: -34.6989,
+      lng: -64.7597,
     },
     label: {
       color: 'red',
@@ -42,13 +42,13 @@ export class MasInfoComponent implements OnInit {
   }
   ngOnInit(): void { 
     this.center = {
-      lat: this.establecimientoDetalles?.domicilio.lat || -40,
-      lng: this.establecimientoDetalles?.domicilio.lng || -80
+      lat: this.establecimientoDetalles?.domicilio.lat || -34.6989,
+      lng: this.establecimientoDetalles?.domicilio.lng || -64.7597
     };
 
     this.marker.position = {
-      lat: this.establecimientoDetalles?.domicilio.lat || -40,
-      lng: this.establecimientoDetalles?.domicilio.lng || -80
+      lat: this.establecimientoDetalles?.domicilio.lat || -34.6989,
+      lng: this.establecimientoDetalles?.domicilio.lng || -64.7597
     };
 
     this.marker.title = this.establecimientoDetalles?.nombre || 'Vacio...';
