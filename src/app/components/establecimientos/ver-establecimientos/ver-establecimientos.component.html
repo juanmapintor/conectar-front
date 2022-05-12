@@ -25,9 +25,9 @@
 
         <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex;" (click)="expandirRow(i, element)"
-            style="text-align: right">
-            <button mat-icon-button color="primary" [class.hidden]="loading">
+          <td mat-cell *matCellDef="let element; let i = dataIndex;" 
+            style="text-align: right; display: flex;">
+            <button mat-icon-button color="primary" [class.hidden]="loading" (click)="expandirRow(i, element)">
               <mat-icon *ngIf="indiceExpandido != i">visibility</mat-icon>
               <mat-icon *ngIf="indiceExpandido == i">visibility_off</mat-icon>
             </button>
@@ -46,7 +46,7 @@
             <div class="division-detalle-establecimiento"
               [@detailExpand]="indiceExpandido == i ? 'expanded' : 'collapsed'">
               <mat-spinner style="margin: auto" *ngIf="loadingEstablecimientos[i]"></mat-spinner>
-              <app-mas-info [establecimientoDetalles]="establecimientoDetalles" *ngIf="!loadingEstablecimientos[i] && establecimientoDetalles"></app-mas-info>
+              <app-mas-info-establecimiento [establecimientoDetalles]="establecimientoDetalles" *ngIf="!loadingEstablecimientos[i] && establecimientoDetalles"></app-mas-info-establecimiento>
             </div>
           </td>
         </ng-container>

@@ -5,11 +5,11 @@ import { Domicilio } from 'src/app/models/domicilio';
 import { EstablecimientoDetalles } from 'src/app/models/establecimiento';
 
 @Component({
-  selector: 'app-mas-info',
-  templateUrl: './mas-info.component.html',
-  styleUrls: ['./mas-info.component.scss']
+  selector: 'app-mas-info-establecimiento',
+  templateUrl: './mas-info-establecimiento.component.html',
+  styleUrls: ['./mas-info-establecimiento.component.scss']
 })
-export class MasInfoComponent implements OnInit {
+export class MasInfoEstablecimientoComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -18,23 +18,20 @@ export class MasInfoComponent implements OnInit {
     );
 
   @Input('establecimientoDetalles') establecimientoDetalles!: EstablecimientoDetalles;
-  center: google.maps.LatLngLiteral = {
-    lat: -34.6989,
-    lng: -64.7597
+  markerOptions: google.maps.MarkerOptions = {
+    label: '',
+    animation: google.maps.Animation.DROP
   }
-  marker = {
-    position: {
-      lat: -34.6989,
-      lng: -64.7597,
-    },
-    label: {
-      color: 'red',
-      text: 'Establecimiento',
-    },
-    title: 'Nombre...',
-    options: { animation: google.maps.Animation.BOUNCE },
-  }
-  
+  mapOptions: google.maps.MapOptions = {
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false,
+    clickableIcons: false,
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  mapCenter: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+  center: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+
   constructor(
     private breakpointObserver: BreakpointObserver
   ) {
@@ -46,13 +43,12 @@ export class MasInfoComponent implements OnInit {
       lng: this.establecimientoDetalles?.domicilio.lng || -64.7597
     };
 
-    this.marker.position = {
+    this.mapCenter = {
       lat: this.establecimientoDetalles?.domicilio.lat || -34.6989,
       lng: this.establecimientoDetalles?.domicilio.lng || -64.7597
     };
 
-    this.marker.title = this.establecimientoDetalles?.nombre || 'Vacio...';
-    this.marker.label.text = this.establecimientoDetalles?.nombre || 'Vacio...';
+    this.markerOptions.label = this.establecimientoDetalles?.nombre || 'Vacio...';
   }
 
 

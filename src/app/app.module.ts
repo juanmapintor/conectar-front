@@ -44,7 +44,8 @@ import { VerDispositivosComponent } from './components/dispositivos/ver-disposit
 import { HomePersonasComponent } from './components/personas/home-personas/home-personas.component';
 import { SvgImgComponent } from './components/helpers/svg-img/svg-img.component';
 import { NuevoResponsableComponent } from './components/personas/responsables/nuevo-responsable/nuevo-responsable.component';
-import { MasInfoComponent } from './components/establecimientos/ver-establecimientos/mas-info/mas-info.component';
+import { MasInfoEstablecimientoComponent } from './components/establecimientos/ver-establecimientos/mas-info-establecimiento/mas-info-establecimiento.component';
+import { MasInfoZonaComponent } from './components/establecimientos/zonas/ver-zonas/mas-info-zona/mas-info-zona.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { MasInfoComponent } from './components/establecimientos/ver-establecimie
     HomePersonasComponent,
     SvgImgComponent,
     NuevoResponsableComponent,
-    MasInfoComponent,
+    MasInfoEstablecimientoComponent,
+    MasInfoZonaComponent,
   ],
   imports: [
     BrowserModule,

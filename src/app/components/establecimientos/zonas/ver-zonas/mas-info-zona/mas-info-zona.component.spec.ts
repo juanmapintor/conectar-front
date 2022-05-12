@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MasInfoComponent } from './mas-info.component';
+import { MasInfoZonaComponent } from './mas-info-zona.component';
 
-describe('MasInfoComponent', () => {
-  let component: MasInfoComponent;
-  let fixture: ComponentFixture<MasInfoComponent>;
+describe('MasInfoZonaComponent', () => {
+  let component: MasInfoZonaComponent;
+  let fixture: ComponentFixture<MasInfoZonaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MasInfoComponent ]
+      declarations: [ MasInfoZonaComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MasInfoComponent);
+    fixture = TestBed.createComponent(MasInfoZonaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

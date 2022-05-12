@@ -78,11 +78,11 @@ export class NuevoEstablecimientoComponent implements OnInit {
     'acciones',
   ];
 
-  @ViewChild('chooseMap', { static: false }) mapElement?: google.maps.Map; 
   mapOptions: google.maps.MapOptions = {
     streetViewControl: false,
     mapTypeControl: false,
     fullscreenControl: false,
+    clickableIcons: false,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   };
   mapCenter: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
