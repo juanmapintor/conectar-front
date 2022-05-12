@@ -63,3 +63,10 @@ mat-card:last-of-type {
 .card-100 {
   width: 95%;
 }
+
+.static-container {
+  width: calc(100% - 1px);
+  max-width: calc(100% - 1px);
+  height: 500px;
+  min-height: 500px;
+}

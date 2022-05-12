@@ -5,7 +5,7 @@
     <mat-card-subtitle>Nuevo establecimiento.</mat-card-subtitle>
     <mat-card-title>Establecimientos</mat-card-title>
     <mat-card-content>
-      
+
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>CUE</mat-label>
@@ -26,7 +26,8 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>E-mail</mat-label>
-          <input autocomplete="off" matInput placeholder="mail@establecimiento.com" type="email" formControlName="mail" />
+          <input autocomplete="off" matInput placeholder="mail@establecimiento.com" type="email"
+            formControlName="mail" />
           <mat-hint>Ingrese la direccion de email del establecimiento.</mat-hint>
         </mat-form-field>
       </div>
@@ -68,7 +69,8 @@
         <mat-form-field appearance="outline">
           <mat-label>Modalidad</mat-label>
           <mat-select formControlName="modalidadID">
-            <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad.modalidadID">{{modalidad.modalidad}}</mat-option> 
+            <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad.modalidadID">{{modalidad.modalidad}}
+            </mat-option>
 
           </mat-select>
           <mat-hint>Seleccione el sector al que pertenece el establecimiento.</mat-hint>
@@ -78,7 +80,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Ambito</mat-label>
           <mat-select formControlName="ambitoID">
-            <mat-option *ngFor="let ambito of ambitos" [value]="ambito.ambitoID">{{ambito.ambito}}</mat-option> 
+            <mat-option *ngFor="let ambito of ambitos" [value]="ambito.ambitoID">{{ambito.ambito}}</mat-option>
           </mat-select>
           <mat-hint>Seleccione el ambito del establecimiento.</mat-hint>
         </mat-form-field>
@@ -191,7 +193,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Localidad</mat-label>
-          <mat-select formControlName="localidad">
+          <mat-select formControlName="localidad" (selectionChange)="setearCentroide()">
             <mat-option *ngFor="let localidad of localidades" [value]="localidad">{{ localidad.nombre }}</mat-option>
           </mat-select>
           <mat-hint>Seleccione la localidad.</mat-hint>
@@ -235,9 +237,14 @@
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline">
-          <mat-label>Obervaciones</mat-label>
+          <mat-label>Observaciones</mat-label>
           <textarea matInput formControlName="observacion"></textarea>
         </mat-form-field>
+      </div>
+      <div class="static-container">
+        <google-map width="100%" height="100%" [options]="mapOptions" [center]="mapCenter" [zoom]="mapZoom" (mapClick)="moveMap($event)">
+          <map-marker [position]="center"></map-marker>
+        </google-map>
       </div>
       <div class="form-row" style="margin-top: 15px;">
         <button mat-raised-button color="primary" style="margin-left: auto;" (click)="agregarEstablecimiento()"

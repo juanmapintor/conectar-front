@@ -29,7 +29,7 @@ export class UbicacionesService {
   public localidades(idDepartamento: string){
     let localidades: any = [];
     for(let localidad of localidadesLista.localidades){
-      if(localidad.departamento.id == idDepartamento) localidades.push({id: localidad.id, nombre: localidad.nombre});
+      if(localidad.departamento.id == idDepartamento) localidades.push({id: localidad.id, nombre: localidad.nombre, centroide: localidad.centroide});
     }
     return localidades;
   }

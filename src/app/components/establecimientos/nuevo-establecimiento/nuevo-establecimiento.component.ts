@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -28,6 +28,7 @@ import { JSONHelper } from 'src/app/services/helpers/jsonhelper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
 import { NuevaOfertaComponent } from '../ofertas/nueva-oferta/nueva-oferta.component';
+import { MapType } from '@angular/compiler';
 
 @Component({
   selector: 'app-nuevo-establecimiento',
@@ -76,6 +77,20 @@ export class NuevoEstablecimientoComponent implements OnInit {
     'tipo',
     'acciones',
   ];
+
+  @ViewChild('chooseMap', { static: false }) mapElement?: google.maps.Map; 
+  mapOptions: google.maps.MapOptions = {
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false,
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  mapCenter: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+  mapZoom = 4;
+
+  center: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+
+
 
   nuevoEstablecimientoForm: FormGroup;
 
@@ -126,7 +141,12 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.load();
+    this.load(); 
+  }
+
+
+  moveMap(event: google.maps.MapMouseEvent) {
+    this.center = (event.latLng?.toJSON() || {lat: 0, lng: 0});
   }
 
   private async load() {
@@ -323,7 +343,6 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.tipoTelefonoSelect = 'fijo';
     this.telefonoInput.reset();
   }
-
   agregarZona() {
     const dialogRef = this.dialog.open(NuevaZonaComponent);
     dialogRef.afterClosed().subscribe({
@@ -350,7 +369,6 @@ export class NuevoEstablecimientoComponent implements OnInit {
       }
     })
   }
-
   eliminarTelefono(index: number) {
     this.telefonos.splice(index, 1);
     this.dataSourceTelefonos.data = this.telefonos;
@@ -362,12 +380,16 @@ export class NuevoEstablecimientoComponent implements OnInit {
     );
     this.nuevoEstablecimientoForm.get('departamento')?.enable();
   }
-
   setearLocalidades() {
     this.localidades = this._ubicacionesService.localidades(
       this.nuevoEstablecimientoForm.get('departamento')?.value.id
     );
     this.nuevoEstablecimientoForm.get('localidad')?.enable();
+  }
+  setearCentroide(){
+    this.center =  { lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon };
+    this.mapCenter = { lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon };
+    this.mapZoom = 15;
   }
 
   public async agregarEstablecimiento() {
@@ -383,6 +405,8 @@ export class NuevoEstablecimientoComponent implements OnInit {
       nuevosValoresEstablecimiento.localidad.nombre;
     nuevosValoresEstablecimiento.horario = `${nuevosValoresEstablecimiento.horario_desde}-${nuevosValoresEstablecimiento.horario_hasta}`;
     nuevosValoresEstablecimiento.telefonos = this.telefonos;
+    nuevosValoresEstablecimiento.lat = this.center.lat;
+    nuevosValoresEstablecimiento.lng = this.center.lng;
     delete nuevosValoresEstablecimiento.horario_desde;
     delete nuevosValoresEstablecimiento.horario_hasta;
 
@@ -438,5 +462,6 @@ export class NuevoEstablecimientoComponent implements OnInit {
   loading() : boolean {
     return this.loadingAmbitos || this.loadingModalidades || this.loadingNiveles || this.loadingOfertas || this.loadingSectores || this.loadingTurnos || this.loadingZonas;
   }
+
 
 }
