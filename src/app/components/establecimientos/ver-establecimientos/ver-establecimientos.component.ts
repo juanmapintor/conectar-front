@@ -36,6 +36,7 @@ export class VerEstablecimientosComponent implements AfterViewInit {
 
   loading = true;
   loadingEstablecimientos: boolean[] = [];
+  emptyTable = false;
 
   establecimientosDefault = [
     {
@@ -101,7 +102,7 @@ export class VerEstablecimientosComponent implements AfterViewInit {
   }
 
   private configEstablecimiento() {
-    this.establecimientos = this.establecimientosPage.data;
+    if(this.establecimientosPage) this.establecimientos = this.establecimientosPage.data;
     this.dataSourceEstablecimientos.data = this.establecimientos;
   }
   private configPaginator() {
@@ -135,7 +136,8 @@ export class VerEstablecimientosComponent implements AfterViewInit {
     try {
       this.establecimientosPage = await this._establecimientoService.index(page);
       this.configEstablecimiento();
-      this.configPaginator();
+      if(this.establecimientosPage) this.configPaginator();
+      if(!this.establecimientosPage) this.emptyTable = true;
       this.configTabla();
       this.loading = false;
     } catch (error: any) {

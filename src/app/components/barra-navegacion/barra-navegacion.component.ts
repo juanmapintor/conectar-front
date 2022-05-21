@@ -2,7 +2,6 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { MatSidenav } from '@angular/material/sidenav';
 import { TokenService } from 'src/app/services/token.service';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
@@ -30,8 +29,8 @@ export class BarraNavegacionComponent {
 
   logout() {
     this.menuShow = false;
-    this._tokenService.signOut();
     this._userService.logout();
+    this._tokenService.signOut();
     this._router.navigate(['login']);
   }
 
