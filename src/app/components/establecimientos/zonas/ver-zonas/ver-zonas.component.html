@@ -1,49 +1,62 @@
-<div class="full-centered" *ngIf="loading">
-  <mat-spinner></mat-spinner>
+<title mat-dialog-title>Zonas.</title>
+<p>Esta tabla muestra las zonas cargadas, permite editarlas o eliminarlas.</p>
+<table *ngIf="!emptyTable" mat-table [dataSource]="dataSourceZonas" multiTemplateDataRows class="mat-elevation-z8"
+  style="margin-top: 20px; margin-bottom: 20px; width: 100%">
+  <ng-container matColumnDef="zona">
+    <th mat-header-cell *matHeaderCellDef>Zona</th>
+    <td mat-cell *matCellDef="let element">{{ element.nombre_zona }}</td>
+  </ng-container>
+  <ng-container matColumnDef="supervisor">
+    <th mat-header-cell *matHeaderCellDef>Supervisor/a</th>
+    <td mat-cell *matCellDef="let element">{{ element.nombre_supervisor + ' ' + element.apellido_supervisor }}</td>
+  </ng-container>
+  <ng-container matColumnDef="mail">
+    <th mat-header-cell *matHeaderCellDef>E-mail</th>
+    <td mat-cell *matCellDef="let element">{{ element.mail_supervisor }}</td>
+  </ng-container>
+  <ng-container matColumnDef="telefono">
+    <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+    <td mat-cell *matCellDef="let element">{{ element.telefono_supervisor }}</td>
+  </ng-container>
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element; let i = dataIndex;" style="text-align: right;">
+      <button *ngIf="(isHandset$ | async)" mat-icon-button color="primary" [class.hidden]="loading "
+        (click)="expandirRow(i, element)">
+        <mat-icon *ngIf="indiceExpandido != i">visibility</mat-icon>
+        <mat-icon *ngIf="indiceExpandido == i">visibility_off</mat-icon>
+      </button>
+      <button mat-icon-button color="accent">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="detalleZona">
+    <td mat-cell *matCellDef="let element; let i = dataIndex;"
+      [attr.colspan]="(!(isHandset$ | async) ? displayedColumnsZonasFull :  displayedColumnsZonasHandset).length">
+      <div class="division-detalle-zona" [@detailExpand]="indiceExpandido == i ? 'expanded' : 'collapsed'">
+        <app-mas-info-zona [zonaDetalles]="zonaDetalles" *ngIf="indiceExpandido == i && zonaDetalles">
+        </app-mas-info-zona>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+    *matHeaderRowDef="!(isHandset$ | async) ? displayedColumnsZonasFull :  displayedColumnsZonasHandset">
+  </tr>
+  <tr mat-row
+    *matRowDef="let element; columns: !(isHandset$ | async) ? displayedColumnsZonasFull :  displayedColumnsZonasHandset"
+    class="zona-row" [class.loading]="loading"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['detalleZona']" class="zona-detalle-row"></tr>
+</table>
+<mat-paginator *ngIf="!emptyTable" hidePageSize="true"></mat-paginator>
+<div class="info-div" *ngIf="emptyTable">
+  <span>No hay zonas para mostrar </span>
 </div>
-<div *ngIf="!loading">
-  <title mat-dialog-title>Zonas.</title>
-  <p>Esta tabla muestra las zonas cargadas, permite editarlas o eliminarlas.</p>
-  <div *ngIf="zonas.length == 0" class="info-div">
-    <p>No hay zonas agregadas.</p>
-  </div>
-  <table mat-table [dataSource]="dataSourceZonas" class="mat-elevation-z8"
-    style="margin-top: 20px; margin-bottom: 20px; width: 100%" *ngIf="zonas.length > 0">
-    <ng-container matColumnDef="zona">
-      <th mat-header-cell *matHeaderCellDef>Zona</th>
-      <td mat-cell *matCellDef="let element">{{ element.nombre_zona }}</td>
-    </ng-container>
-    <ng-container matColumnDef="supervisor">
-      <th mat-header-cell *matHeaderCellDef>Supervisor/a</th>
-      <td mat-cell *matCellDef="let element">{{ element.nombre_supervisor + ' ' + element.apellido_supervisor }}</td>
-    </ng-container>
-    <ng-container matColumnDef="mail">
-      <th mat-header-cell *matHeaderCellDef>E-mail</th>
-      <td mat-cell *matCellDef="let element">{{ element.mail_supervisor }}</td>
-    </ng-container>
-    <ng-container matColumnDef="telefono">
-      <th mat-header-cell *matHeaderCellDef>Teléfono</th>
-      <td mat-cell *matCellDef="let element">{{ element.telefono_supervisor }}</td>
-    </ng-container>
-
-
-
-    <ng-container matColumnDef="acciones">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element; let i = index" style="text-align: right">
-        <button mat-icon-button color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button color="warn">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsZonas"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsZonas"></tr>
-  </table>
-  <div style="display: flex;">
-    <button mat-raised-button mat-dialog-close color="primary" style="margin-left: auto;">Aceptar</button>
-  </div>
+<div style="display: flex;">
+  <button mat-raised-button mat-dialog-close color="primary" style="margin-left: auto;">Aceptar</button>
 </div>
+<mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="loading"></mat-progress-bar>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Zona } from 'src/app/models/zona';
 
 @Component({
   selector: 'app-mas-info-zona',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mas-info-zona.component.scss']
 })
 export class MasInfoZonaComponent implements OnInit {
+  
+  @Input('zonaDetalles') zonaDetalles!: Zona;
+  info = "koko";
+
 
   constructor() { }
 
   ngOnInit(): void {
+    this.info = JSON.stringify(this.zonaDetalles);
   }
 
 }

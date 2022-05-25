@@ -160,7 +160,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.nuevoEstablecimientoForm.disable();
     this.zonas = [];
     try {
-      this.zonas = await this._zonaService.index();
+      this.zonas = await this._zonaService.indexAll();
       this.loadingZonas = false;
       this.nuevoEstablecimientoForm.enable();
         
@@ -185,7 +185,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.nuevoEstablecimientoForm.disable();
     this.ofertas = [];
     try {
-      this.ofertas = await this._ofertaService.index();
+      this.ofertas = await this._ofertaService.indexAll();
       this.loadingOfertas = false;
       this.nuevoEstablecimientoForm.enable();
         
@@ -387,8 +387,16 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.nuevoEstablecimientoForm.get('localidad')?.enable();
   }
   setearCentroide(){
-    this.center =  { lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon };
-    this.mapCenter = { lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon };
+    this.center =  
+    { 
+      lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, 
+      lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon 
+    };
+    this.mapCenter = 
+    { 
+      lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, 
+      lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon 
+    };
     this.mapZoom = 15;
   }
 
@@ -403,7 +411,8 @@ export class NuevoEstablecimientoComponent implements OnInit {
       nuevosValoresEstablecimiento.departamento.nombre;
     nuevosValoresEstablecimiento.localidad =
       nuevosValoresEstablecimiento.localidad.nombre;
-    nuevosValoresEstablecimiento.horario = `${nuevosValoresEstablecimiento.horario_desde}-${nuevosValoresEstablecimiento.horario_hasta}`;
+    nuevosValoresEstablecimiento.horario = 
+    `${nuevosValoresEstablecimiento.horario_desde}-${nuevosValoresEstablecimiento.horario_hasta}`;
     nuevosValoresEstablecimiento.telefonos = this.telefonos;
     nuevosValoresEstablecimiento.lat = this.center.lat;
     nuevosValoresEstablecimiento.lng = this.center.lng;

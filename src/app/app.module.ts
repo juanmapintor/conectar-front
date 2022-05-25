@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core'; import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -97,7 +98,8 @@ import { MasInfoZonaComponent } from './components/establecimientos/zonas/ver-zo
     MatTooltipModule,
     GoogleMapsModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders,
+    { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

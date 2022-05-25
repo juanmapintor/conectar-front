@@ -18,7 +18,7 @@ export class EstablecimientoService {
         params: new HttpParams().set('page', page)
       }
       let response: any = await firstValueFrom(
-        this._http.get(GLOBAL.API_URL + 'establecimientos', options)
+        this._http.get(GLOBAL.API_URL + 'page/establecimientos', options)
       );
       return <Page<EstablecimientoLista>>response;
     } catch (error) {

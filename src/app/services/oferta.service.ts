@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Oferta } from '../models/oferta';
+import { Page } from '../models/page';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,22 @@ import { Oferta } from '../models/oferta';
 export class OfertaService {
   constructor(private _http: HttpClient) { }
 
-  public async index(): Promise<Oferta[]> {
+  public async index(page: number): Promise<Page<Oferta>> {
+    try {
+      let options = {
+        headers: GLOBAL.JSON_HEADERS.headers,
+        params: new HttpParams().set('page', page)
+      }
+      let response: any = await firstValueFrom(
+        this._http.get(GLOBAL.API_URL + 'page/ofertas', options)
+      );
+      return <Page<Oferta>>response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async indexAll(): Promise<Oferta[]> {
     try {
       let response: any = await firstValueFrom(
         this._http.get(GLOBAL.API_URL + 'ofertas', GLOBAL.JSON_HEADERS)

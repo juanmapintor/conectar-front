@@ -1,16 +1,32 @@
 import { Injectable } from '@angular/core';
 import { GLOBAL } from './global';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Zona } from '../models/zona';
+import { Page } from '../models/page';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ZonaService {
   constructor(private _http: HttpClient) { }
+  
+  public async index(page: number): Promise<Page<Zona>> {
+    try {
+      let options = {
+        headers: GLOBAL.JSON_HEADERS.headers,
+        params: new HttpParams().set('page', page)
+      }
+      let response: any = await firstValueFrom(
+        this._http.get(GLOBAL.API_URL + 'page/zonas', options)
+      );
+      return <Page<Zona>>response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  public async index(): Promise<Zona[]> {
+  public async indexAll(): Promise<Zona[]> {
     try {
       let response: any = await firstValueFrom(
         this._http.get(GLOBAL.API_URL + 'zonas', GLOBAL.JSON_HEADERS)
@@ -30,8 +46,6 @@ export class ZonaService {
           );
         }
       }
-
-
       return zonas;
     } catch (error) {
       throw error;

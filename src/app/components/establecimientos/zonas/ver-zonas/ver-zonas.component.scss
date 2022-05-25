@@ -12,3 +12,22 @@
   align-items: center;
   height: 200px;
 }
+
+tr.zona-detalle-row {
+  height: 0;
+}
+
+.zona-row td {
+  border-bottom-width: 0;
+  padding: 10px 0 10px 24px;
+}
+
+.division-detalle-zona {
+  overflow: hidden;
+  display: flex;
+  align-items: baseline;
+}
+
+.loading {
+  opacity: 0.3;
+}
