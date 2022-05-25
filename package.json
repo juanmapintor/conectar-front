@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "build": "ng build",
+    "build": "ng build && xcopy /s /Y dist\\conectar-front\\ ..\\conectar-api\\public && copy dist\\conectar-front\\index.html ..\\conectar-api\\resources\\views\\welcome.blade.php && del ..\\conectar-api\\public\\index.html",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
