@@ -1,15 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, map, Observable, of, shareReplay } from 'rxjs';
-import { Domicilio } from 'src/app/models/domicilio';
+import { map, Observable, of, shareReplay } from 'rxjs';
 import { EstablecimientoDetalles, EstablecimientoLista } from 'src/app/models/establecimiento';
 import { Page } from 'src/app/models/page';
 import { EstablecimientoService } from 'src/app/services/establecimiento.service';
-import { GLOBAL } from 'src/app/services/global';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -71,6 +68,8 @@ export class VerEstablecimientosComponent implements AfterViewInit {
 
   indiceExpandido = -1;
 
+  currentPage = 1;
+
   dataSourceEstablecimientos = new MatTableDataSource<any>(this.establecimientosDefault);
   displayedColumnsEstablecimientosFull: string[] = [
     'cue',
@@ -93,10 +92,11 @@ export class VerEstablecimientosComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadEstablecimientos(1);
+    this.loadEstablecimientos(this.currentPage);
     this.paginator.page.subscribe({
       next: (nextPage: any) => {
-        this.loadEstablecimientos(nextPage.pageIndex + 1);
+        this.currentPage = nextPage.pageIndex + 1;
+        this.loadEstablecimientos(this.currentPage);
       }
     });
   }
@@ -134,7 +134,8 @@ export class VerEstablecimientosComponent implements AfterViewInit {
     this.establecimientos = [];
     this.loading = true;
     try {
-      this.establecimientosPage = await this._establecimientoService.index(page);
+      this.currentPage = page;
+      this.establecimientosPage = await this._establecimientoService.index(this.currentPage);
       this.configEstablecimiento();
       if(this.establecimientosPage) this.configPaginator();
       if(!this.establecimientosPage) this.emptyTable = true;
@@ -149,5 +150,52 @@ export class VerEstablecimientosComponent implements AfterViewInit {
         this.loadEstablecimientos(page);
       });
     }
+  }
+  public eliminarEstablecimiento(idEstablecimiento: number) {
+    Swal.fire({
+      title: 'Estas seguro que deseas eliminar el establecimiento?',
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Cancelar',
+      denyButtonText: 'Eliminar'
+    }).then(async (result) => {
+      if (result.isDenied) {
+        Swal.fire({
+          title: 'Eliminando establecimiento...'
+        });
+        Swal.showLoading();
+        try {
+          let eliminado = await this._establecimientoService.destroy(idEstablecimiento);
+          Swal.hideLoading();
+          if (!eliminado) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error :(',
+              text: 'No se pudo eliminar el establecimiento seleccionada porque ya no existe'
+            });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'El establecimiento se eliminó exitosamente.',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.dataSourceEstablecimientos.data.length == 1) {
+              this.loadEstablecimientos(this.currentPage - 1);
+            } else {
+              this.loadEstablecimientos(this.currentPage);
+            }
+          }
+        } catch (response: any) {
+          if (response.error.code == "23000") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error :(',
+              html: 'No se pudo eliminar el establecimiento seleccionada porque hay establecimientos relacionados. <br> Elimine todos los establecimientos que utilicen el establecimiento e intente nuevamente.'
+            });
+          }
+        }
+      }
+    });
   }
 }

@@ -45,6 +45,8 @@ export class VerZonasComponent implements AfterViewInit {
 
   indiceExpandido = -1;
 
+  currentPage = 1;
+
   dataSourceZonas = new MatTableDataSource<any>(this.zonasDefault);
   displayedColumnsZonasFull: string[] = [
     'zona',
@@ -66,10 +68,11 @@ export class VerZonasComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.loadZonas(1);
+    this.loadZonas(this.currentPage);
     this.paginator.page.subscribe({
       next: (nextPage: any) => {
-        this.loadZonas(nextPage.pageIndex + 1);
+        this.currentPage = nextPage.pageIndex + 1;
+        this.loadZonas(this.currentPage);
       }
     });
   }
@@ -96,7 +99,8 @@ export class VerZonasComponent implements AfterViewInit {
     this.zonas = [];
     this.loading = true;
     try {
-      this.zonasPage = await this._zonaService.index(page);
+      this.currentPage = page;
+      this.zonasPage = await this._zonaService.index(this.currentPage);
       this.configZona();
       if(!this.zonasPage) this.emptyTable = true;
       if(this.zonasPage) this.configPaginator();
@@ -111,5 +115,53 @@ export class VerZonasComponent implements AfterViewInit {
         this.loadZonas(page);
       });
     }
+  }
+
+  public eliminarZona(idZona: number) {
+    Swal.fire({
+      title: 'Estas seguro que deseas eliminar la zona?',
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Cancelar',
+      denyButtonText: 'Eliminar'
+    }).then(async (result) => {
+      if (result.isDenied) {
+        Swal.fire({
+          title: 'Eliminando zona...'
+        });
+        Swal.showLoading();
+        try {
+          let eliminado = await this._zonaService.destroy(idZona);
+          Swal.hideLoading();
+          if (!eliminado) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error :(',
+              text: 'No se pudo eliminar la zona seleccionada porque ya no existe'
+            });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'La zona se elimino exitosamente.',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.dataSourceZonas.data.length == 1) {
+              this.loadZonas(this.currentPage - 1);
+            } else {
+              this.loadZonas(this.currentPage);
+            }
+          }
+        } catch (response: any) {
+          if (response.error.code == "23000") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error :(',
+              html: 'No se pudo eliminar la zona seleccionada porque hay establecimientos relacionados. <br> Elimine todos los establecimientos que utilicen la zona e intente nuevamente.'
+            });
+          }
+        }
+      }
+    });
   }
 }

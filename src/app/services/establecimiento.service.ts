@@ -74,7 +74,9 @@ export class EstablecimientoService {
       }
     }
   
-    public async destroy(establecimientoID: number): Promise<boolean> {
+    
+    */
+   public async destroy(establecimientoID: number): Promise<boolean> {
       try {
         let response: any = await firstValueFrom(
           this._http.delete(
@@ -88,5 +90,4 @@ export class EstablecimientoService {
         throw error;
       }
     }
-    */
 }
