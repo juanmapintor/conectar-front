@@ -93,12 +93,11 @@ export class ZonaService {
     }
   }
 
-  public async update(zonaID: number, zonaActualizada: Zona): Promise<Zona> {
+  public async update(zonaActualizada: Zona): Promise<Zona> {
     try {
-      zonaActualizada.zonaID = -1;
       let zona: any = await firstValueFrom(
         this._http.put(
-          GLOBAL.API_URL + `zonas/${zonaID}`,
+          GLOBAL.API_URL + `zonas/${zonaActualizada.zonaID}`,
           JSON.stringify(zonaActualizada),
           GLOBAL.JSON_HEADERS
         )

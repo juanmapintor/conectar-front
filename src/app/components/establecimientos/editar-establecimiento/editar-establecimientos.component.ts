@@ -52,12 +52,14 @@ export class EditarEstablecimientoComponent implements OnInit {
 
 
   turnos: Turno[] = [];
+  turnosSeleccionados: Turno[] = [];
   sectores: Sector[] = [];
   niveles: Nivel[] = [];
   modalidades: Modalidad[] = [];
   ambitos: Ambito[] = [];
   zonas: Zona[] = [];
   ofertas: Oferta[] = [];
+  ofertasSeleccionadas: Oferta[] = [];
 
 
   telefonoInput = new FormControl('');
@@ -145,6 +147,8 @@ export class EditarEstablecimientoComponent implements OnInit {
             this.provinciaSeleccionada = establecimiento.domicilio.provincia;
             this.departamentoSeleccionado = establecimiento.domicilio.departamento;
             this.localidadSeleccionada = establecimiento.domicilio.localidad;
+            this.turnosSeleccionados = establecimiento.turnos;
+            this.ofertasSeleccionadas = establecimiento.ofertas;
             this.editarEstablecimientoForm = this._formBuilder.group({
               //Datos correspondientes a Establecimiento
               cue: new FormControl(establecimiento.cue, [Validators.required]),
@@ -228,7 +232,7 @@ export class EditarEstablecimientoComponent implements OnInit {
       this.ofertas = await this._ofertaService.indexAll();
       this.loadingOfertas = false;
       this.editarEstablecimientoForm.enable();
-
+      this.bindOfertas();
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -244,6 +248,16 @@ export class EditarEstablecimientoComponent implements OnInit {
           showConfirmButton: false,
         }).then(() => this._router.navigate(['establecimientos']));
     }
+  }
+  private bindOfertas() {
+    let oferSel: number[] = [];
+    this.ofertasSeleccionadas.forEach (
+      os => {
+        let oferta = this.ofertas.find(o => o.ofertaID == os.ofertaID);
+        if (oferta) oferSel.push(oferta.ofertaID);
+      }
+    );
+    this.editarEstablecimientoForm.get('ofertas')?.setValue(oferSel);
   }
   private loadOpciones() {
     this.loadAmbitos();
@@ -354,6 +368,7 @@ export class EditarEstablecimientoComponent implements OnInit {
     this.turnos = [];
     try {
       this.turnos = await this._opcionesEstablecimientoService.indexTurno();
+      this.bindTurnos();
       this.loadingTurnos = false;
       this.editarEstablecimientoForm.enable();
 
@@ -371,6 +386,17 @@ export class EditarEstablecimientoComponent implements OnInit {
         showConfirmButton: false,
       }).then(() => this._router.navigate(['establecimientos']));
     }
+  }
+
+  private bindTurnos() {
+    let turnSel: number[] = [];
+    this.turnosSeleccionados.forEach(
+      ts => {
+        let turno = this.turnos.find(t => t.turnoID == ts.turnoID);
+        if (turno) turnSel.push(turno.turnoID);
+      }
+    );
+    this.editarEstablecimientoForm.get('turnos')?.setValue(turnSel);
   }
 
   agregarZona() {
@@ -395,10 +421,11 @@ export class EditarEstablecimientoComponent implements OnInit {
         await this.loadOfertas();
         this.loadingOfertas = false;
         this.editarEstablecimientoForm.enable();
-
       }
     })
   }
+
+
 
   agregarTelefono() {
     let telefono = {
@@ -463,13 +490,27 @@ export class EditarEstablecimientoComponent implements OnInit {
     this.mapZoom = 15;
   }
 
-  public async editarEstablecimiento() {
+  public editarEstablecimiento(){
+    Swal.fire({
+      title: '¿Estás seguro que deseas guardar los cambios en el establecimiento?',
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No'
+    }).then(result => {
+      if(result.isConfirmed){
+        this.editar();
+      }
+    });
+  }
+
+  private async editar() {
     let editarValoresEstablecimiento = JSONHelper.removeEmpty(
       this.editarEstablecimientoForm.getRawValue()
     );
 
     editarValoresEstablecimiento.establecimientoID = this.establecimientoID;
-      editarValoresEstablecimiento.provincia =
+    editarValoresEstablecimiento.provincia =
       editarValoresEstablecimiento.provincia.nombre;
     editarValoresEstablecimiento.departamento =
       editarValoresEstablecimiento.departamento.nombre;
@@ -510,7 +551,7 @@ export class EditarEstablecimientoComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500,
             text: 'Se editó el establecimiento correctamente',
-            title: 'Agregado',
+            title: 'Guardado',
           });
         }
         this._router.navigate(['establecimientos/ver']);
@@ -538,5 +579,20 @@ export class EditarEstablecimientoComponent implements OnInit {
 
   public loading(): boolean {
     return this.loadingAmbitos || this.loadingModalidades || this.loadingNiveles || this.loadingOfertas || this.loadingSectores || this.loadingTurnos || this.loadingZonas;
+  }
+
+  public cancelarEdicion() {
+    Swal.fire({
+      title: '¿Estás seguro que deseas cancelar la edicion el establecimiento?',
+      text: 'Cualquier cambio efectuado no se guardará',
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No'
+    }).then(result => {
+      if(result.isConfirmed){
+        this._router.navigate(['establecimientos/ver']);
+      }
+    });
   }
 }

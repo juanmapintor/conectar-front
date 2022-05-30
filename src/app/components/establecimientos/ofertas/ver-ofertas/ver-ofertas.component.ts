@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable, shareReplay } from 'rxjs';
@@ -7,6 +8,7 @@ import { Oferta } from 'src/app/models/oferta';
 import { Page } from 'src/app/models/page';
 import { OfertaService } from 'src/app/services/oferta.service';
 import Swal from 'sweetalert2';
+import { NuevaOfertaComponent } from '../nueva-oferta/nueva-oferta.component';
 
 @Component({
   selector: 'app-ver-ofertas',
@@ -47,7 +49,8 @@ export class VerOfertasComponent implements AfterViewInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private _ofertaService: OfertaService
+    private _ofertaService: OfertaService,
+    public dialog: MatDialog
   ) { }
 
   ngAfterViewInit(): void {
@@ -136,6 +139,18 @@ export class VerOfertasComponent implements AfterViewInit {
             });
           }
         }
+      }
+    });
+  }
+
+  public editarOferta(oferta: Oferta){
+    const dialogRef = this.dialog.open(NuevaOfertaComponent, {
+      data: {
+        oferta: oferta
+      }
+    }).afterClosed().subscribe({
+      next: (result) => {
+        this.loadOfertas(this.currentPage);
       }
     });
   }

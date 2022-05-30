@@ -81,12 +81,11 @@ export class OfertaService {
     }
   }
 
-  public async update(ofertaID: number, ofertaActualizada: Oferta): Promise<Oferta> {
+  public async update(ofertaActualizada: Oferta): Promise<Oferta> {
     try {
-      ofertaActualizada.ofertaID = -1;
       let oferta: any = await firstValueFrom(
         this._http.put(
-          GLOBAL.API_URL + `ofertas/${ofertaID}`,
+          GLOBAL.API_URL + `ofertas/${ofertaActualizada.ofertaID}`,
           JSON.stringify(ofertaActualizada),
           GLOBAL.JSON_HEADERS
         )

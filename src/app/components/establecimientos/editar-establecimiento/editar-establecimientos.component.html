@@ -2,10 +2,9 @@
   [class.desktop-padding]="!(isHandset$ | async)" [formGroup]="editarEstablecimientoForm">
   <mat-card [class.card-80]="!(isHandset$ | async)" [class.card-100]="isHandset$ | async">
     <mat-progress-bar mode="indeterminate" style="margin-bottom: 15px;" *ngIf="loading()"></mat-progress-bar>
-    <mat-card-subtitle>Nuevo establecimiento.</mat-card-subtitle>
+    <mat-card-subtitle>Editar establecimiento.</mat-card-subtitle>
     <mat-card-title>Establecimientos</mat-card-title>
     <mat-card-content>
-
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>CUE</mat-label>
@@ -248,8 +247,9 @@
         </google-map>
       </div>
       <div class="form-row" style="margin-top: 15px;">
+        <button mat-raised-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
         <button mat-raised-button color="accent" style="margin-left: auto;" (click)="editarEstablecimiento()"
-          [disabled]="!editarEstablecimientoForm.touched || editarEstablecimientoForm.invalid">Agregar</button>
+          [disabled]="!editarEstablecimientoForm.touched || editarEstablecimientoForm.invalid">Guardar</button>
       </div>
       <mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="uploading"></mat-progress-bar>
     </mat-card-content>

@@ -1,16 +1,20 @@
 <form novalidate>
-    <h1 mat-dialog-title>Nueva Oferta</h1>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Oferta</mat-label>
-        <input matInput placeholder="Oferta..." type="text" [formControl]="nuevaOfertaControl"/>
-        <mat-hint>Ingrese la nueva oferta...</mat-hint>
-      </mat-form-field>
-    </div>
-    <div class="form-row" style="margin-top: 15px;">
-        <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
-        <button mat-raised-button color="primary" style="margin-left: auto;" [disabled]="nuevaOfertaControl.invalid" (click)="agregarOferta()">Agregar</button>
-      </div>
-  </form>
-  <mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="loading"></mat-progress-bar>
-  
+  <h1 mat-dialog-title>{{isEdit ? ' Editar Oferta' : 'Nueva Oferta'}}</h1>
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Oferta</mat-label>
+      <input matInput placeholder="Oferta..." type="text" [formControl]="nuevaOfertaControl" />
+      <mat-hint>Ingrese la nueva oferta...</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="form-row" style="margin-top: 15px;" *ngIf="!isEdit">
+    <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
+    <button mat-raised-button color="primary" style="margin-left: auto;" [disabled]="nuevaOfertaControl.invalid"
+      (click)="agregarOferta()">Agregar</button>
+  </div>
+  <div class="form-row" style="margin-top: 15px;" *ngIf="isEdit">
+    <button mat-raised-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
+    <button mat-raised-button color="primary" style="margin-left: auto;" [disabled]="!nuevaOfertaControl.touched || nuevaOfertaControl.invalid" (click)="editarOferta()">Guardar</button>
+  </div>
+</form>
+<mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="loading"></mat-progress-bar>

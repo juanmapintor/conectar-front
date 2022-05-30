@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable, shareReplay } from 'rxjs';
@@ -8,6 +9,7 @@ import { Page } from 'src/app/models/page';
 import { Zona } from 'src/app/models/zona';
 import { ZonaService } from 'src/app/services/zona.service';
 import Swal from 'sweetalert2';
+import { NuevaZonaComponent } from '../nueva-zona/nueva-zona.component';
 
 @Component({
   selector: 'app-ver-zonas',
@@ -64,7 +66,8 @@ export class VerZonasComponent implements AfterViewInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private _zonaService: ZonaService
+    private _zonaService: ZonaService,
+    public dialog: MatDialog
   ) {}
 
   ngAfterViewInit(): void {
@@ -160,6 +163,18 @@ export class VerZonasComponent implements AfterViewInit {
             });
           }
         }
+      }
+    });
+  }
+
+  public editarZona(zona: Zona){
+    const dialogRef = this.dialog.open(NuevaZonaComponent, {
+      data: {
+        zona: zona
+      }
+    }).afterClosed().subscribe({
+      next: (result) => {
+        this.loadZonas(this.currentPage);
       }
     });
   }

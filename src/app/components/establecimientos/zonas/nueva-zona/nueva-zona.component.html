@@ -1,5 +1,5 @@
 <form novalidate [formGroup]="nuevaZonaForm">
-  <h1 mat-dialog-title>Nueva Zona</h1>
+  <h1 mat-dialog-title>{{isEdit ? 'Editar Zona' : 'Nueva Zona'}}</h1>
   <div class="form-row">
     <mat-form-field appearance="outline">
       <mat-label>Nombre</mat-label>
@@ -34,9 +34,13 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="form-row" style="margin-top: 15px;">
+  <div class="form-row" style="margin-top: 15px;" *ngIf="!isEdit">
     <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
     <button mat-raised-button color="primary" style="margin-left: auto;" [disabled]="nuevaZonaForm.invalid" (click)="agregarZona()">Agregar</button>
+  </div>
+  <div class="form-row" style="margin-top: 15px;" *ngIf="isEdit">
+    <button mat-raised-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
+    <button mat-raised-button color="primary" style="margin-left: auto;" [disabled]="!nuevaZonaForm.touched || nuevaZonaForm.invalid" (click)="editarZona()">Guardar</button>
   </div>
 </form>
 <mat-progress-bar mode="indeterminate" style="margin-top: 15px;" *ngIf="loading"></mat-progress-bar>

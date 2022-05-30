@@ -26,7 +26,7 @@
         <mat-icon *ngIf="indiceExpandido != i">visibility</mat-icon>
         <mat-icon *ngIf="indiceExpandido == i">visibility_off</mat-icon>
       </button>
-      <button mat-icon-button color="accent">
+      <button mat-icon-button color="accent" (click)="editarZona(element)">
         <mat-icon>edit</mat-icon>
       </button>
       <button mat-icon-button color="warn" (click)="eliminarZona(element.zonaID)">

@@ -4,12 +4,11 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, of, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { EstablecimientoDetalles, EstablecimientoLista } from 'src/app/models/establecimiento';
 import { Page } from 'src/app/models/page';
 import { EstablecimientoService } from 'src/app/services/establecimiento.service';
 import Swal from 'sweetalert2';
-import { NuevoEstablecimientoComponent } from '../nuevo-establecimiento/nuevo-establecimiento.component';
 
 @Component({
   selector: 'app-ver-establecimientos',
