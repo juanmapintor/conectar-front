@@ -1,53 +1,14 @@
-<div
-  class="scrollable-div"
-  [class.handset-padding]="isHandset$ | async"
-  [class.desktop-padding]="!(isHandset$ | async)"
->
+<div class="scrollable-div" [class.handset-padding]="isHandset$ | async"
+  [class.desktop-padding]="!(isHandset$ | async)">
   <div class="card-div">
-    <mat-card class="hoverable">
-      <mat-card-title>Alumnos.</mat-card-title>
-      <mat-card-subtitle>Nuevo alumno.</mat-card-subtitle>
-      <mat-card-content>
-        <button class="action-button">
-          <svg-img
-            src="assets/add_circle_outline_black_24dp.svg"
-            fillColor="#28a745"
-          ></svg-img>
-        </button>
-        <p>
-          Crea un nuevo alumno para llevar a cabo la entrega de un dispositivo.
-        </p>
-      </mat-card-content>
-    </mat-card>
     <mat-card class="hoverable">
       <mat-card-title>Alumnos.</mat-card-title>
       <mat-card-subtitle>Muestra alumnos ya existentes.</mat-card-subtitle>
       <mat-card-content>
         <button class="action-button">
-          <svg-img
-            src="assets/format_list_bulleted_black_24dp.svg"
-            fillColor="#28a74580"
-          ></svg-img>
+          <svg-img src="assets/format_list_bulleted_black_24dp.svg" fillColor="#28a74580"></svg-img>
         </button>
         <p>Muestra los alumnos quienes ya han participado en una entrega.</p>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="card-div">
-    <mat-card class="hoverable">
-      <mat-card-title>Responsables.</mat-card-title>
-      <mat-card-subtitle>Nuevo responsable</mat-card-subtitle>
-      <mat-card-content>
-        <a class="action-button" routerLink="nuevo">
-          <svg-img
-            src="assets/add_circle_outline_black_24dp.svg"
-            fillColor="#e83e8c"
-          ></svg-img>
-        </a>
-        <p>
-          Crea nuevos responsables encargados del comodato para alumnos menores
-          de edad.
-        </p>
       </mat-card-content>
     </mat-card>
     <mat-card class="hoverable">
@@ -55,30 +16,9 @@
       <mat-card-subtitle>Ver responsables.</mat-card-subtitle>
       <mat-card-content>
         <a class="action-button" routerLink="ver">
-          <svg-img
-            src="assets/format_list_bulleted_black_24dp.svg"
-            fillColor="#e83e8c80"
-          ></svg-img>
+          <svg-img src="assets/format_list_bulleted_black_24dp.svg" fillColor="#e83e8c80"></svg-img>
         </a>
         <p>Muestra los responsables ya cargados en el sistema.</p>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="hoverable">
-      <mat-card-title>Directivos.</mat-card-title>
-      <mat-card-subtitle
-        >Nuevo directivo de un establecimiento.</mat-card-subtitle
-      >
-      <mat-card-content>
-        <button class="action-button">
-          <svg-img
-            src="assets/add_circle_outline_black_24dp.svg"
-            fillColor="#fd7e14"
-          ></svg-img>
-        </button>
-        <p>
-          Crea un nuevo directivo para un establecimiento, a quienes tambien se
-          les puede asignar un dispositivo.
-        </p>
       </mat-card-content>
     </mat-card>
     <mat-card class="hoverable">
@@ -88,14 +28,11 @@
       </mat-card-subtitle>
       <mat-card-content>
         <button class="action-button">
-          <svg-img
-            src="assets/format_list_bulleted_black_24dp.svg"
-            fillColor="#fd7e1480"
-          ></svg-img>
+          <svg-img src="assets/format_list_bulleted_black_24dp.svg" fillColor="#fd7e1480"></svg-img>
         </button>
         <p>
           Muestra los directivos de establecimiento ya presentes en el
-        sistema.
+          sistema.
         </p>
       </mat-card-content>
     </mat-card>
