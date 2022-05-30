@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*', minHeight: '200px' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -92,7 +92,6 @@ export class VerZonasComponent implements AfterViewInit {
   public async expandirRow(index: number, element: Zona) {
     this.indiceExpandido = this.indiceExpandido == index ? -1 : index;
     this.zonaDetalles = element;
-    console.log("En ver", this.zonaDetalles);
   }
 
   private async loadZonas(page: number) {
@@ -119,7 +118,7 @@ export class VerZonasComponent implements AfterViewInit {
 
   public eliminarZona(idZona: number) {
     Swal.fire({
-      title: 'Estas seguro que deseas eliminar la zona?',
+      title: '¿Estás seguro que deseas eliminar la zona?',
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: 'Cancelar',

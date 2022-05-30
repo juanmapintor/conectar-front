@@ -94,7 +94,7 @@ export class VerOfertasComponent implements AfterViewInit {
 
   public eliminarOferta(idOferta: number) {
     Swal.fire({
-      title: 'Estas seguro que deseas eliminar la oferta?',
+      title: '¿Estás seguro que deseas eliminar la oferta?',
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: 'Cancelar',

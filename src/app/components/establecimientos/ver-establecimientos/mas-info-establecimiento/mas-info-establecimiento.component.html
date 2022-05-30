@@ -44,7 +44,7 @@
         <p class="main">ZONA:</p>
         <p class="info">{{ establecimientoDetalles.zona.nombre_zona }}</p>
         <button mat-icon-button color="secondary" style="margin-bottom: 12px;" #tooltip="matTooltip"
-            matTooltip="Ver mas." matTooltipPosition="right" matTooltipHideDelay="100">
+            matTooltip="Ver mas." matTooltipPosition="right" matTooltipHideDelay="100" (click)="mostrarMasInfoZona(establecimientoDetalles.zona)">
             <mat-icon>open_in_new</mat-icon>
         </button>
     </div>

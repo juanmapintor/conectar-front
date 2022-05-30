@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
 import { HomeDispositivosComponent } from './components/dispositivos/home-dispositivos/home-dispositivos.component';
+import { EditarEstablecimientoComponent } from './components/establecimientos/editar-establecimiento/editar-establecimientos.component';
 import { HomeEstablecimientosComponent } from './components/establecimientos/home-establecimientos/home-establecimientos.component';
 import { NuevoEstablecimientoComponent } from './components/establecimientos/nuevo-establecimiento/nuevo-establecimiento.component';
 import { VerEstablecimientosComponent } from './components/establecimientos/ver-establecimientos/ver-establecimientos.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
 
   { path: 'establecimientos', component: HomeEstablecimientosComponent },
   { path: 'establecimientos/nuevo', component: NuevoEstablecimientoComponent },
+  { path: 'establecimientos/editar', component: EditarEstablecimientoComponent },
   { path: 'establecimientos/ver', component: VerEstablecimientosComponent },
 
   { path: 'dispositivos', component: HomeDispositivosComponent },

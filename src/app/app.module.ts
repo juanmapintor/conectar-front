@@ -47,6 +47,7 @@ import { SvgImgComponent } from './components/helpers/svg-img/svg-img.component'
 import { NuevoResponsableComponent } from './components/personas/responsables/nuevo-responsable/nuevo-responsable.component';
 import { MasInfoEstablecimientoComponent } from './components/establecimientos/ver-establecimientos/mas-info-establecimiento/mas-info-establecimiento.component';
 import { MasInfoZonaComponent } from './components/establecimientos/zonas/ver-zonas/mas-info-zona/mas-info-zona.component';
+import { EditarEstablecimientoComponent } from './components/establecimientos/editar-establecimiento/editar-establecimientos.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { MasInfoZonaComponent } from './components/establecimientos/zonas/ver-zo
     NuevoResponsableComponent,
     MasInfoEstablecimientoComponent,
     MasInfoZonaComponent,
+    EditarEstablecimientoComponent,
   ],
   imports: [
     BrowserModule,

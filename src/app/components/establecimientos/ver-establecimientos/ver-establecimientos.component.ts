@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable, of, shareReplay } from 'rxjs';
@@ -8,6 +9,7 @@ import { EstablecimientoDetalles, EstablecimientoLista } from 'src/app/models/es
 import { Page } from 'src/app/models/page';
 import { EstablecimientoService } from 'src/app/services/establecimiento.service';
 import Swal from 'sweetalert2';
+import { NuevoEstablecimientoComponent } from '../nuevo-establecimiento/nuevo-establecimiento.component';
 
 @Component({
   selector: 'app-ver-establecimientos',
@@ -28,8 +30,6 @@ export class VerEstablecimientosComponent implements AfterViewInit {
       map((result) => result.matches),
       shareReplay()
     );
-
- 
 
   loading = true;
   loadingEstablecimientos: boolean[] = [];
@@ -86,7 +86,8 @@ export class VerEstablecimientosComponent implements AfterViewInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private _establecimientoService: EstablecimientoService
+    private _establecimientoService: EstablecimientoService,
+    public dialog: MatDialog
   ) {
     
   }
@@ -153,7 +154,7 @@ export class VerEstablecimientosComponent implements AfterViewInit {
   }
   public eliminarEstablecimiento(idEstablecimiento: number) {
     Swal.fire({
-      title: 'Estas seguro que deseas eliminar el establecimiento?',
+      title: '¿Estás seguro que deseas eliminar el establecimiento?',
       showConfirmButton: true,
       showDenyButton: true,
       confirmButtonText: 'Cancelar',
@@ -191,11 +192,13 @@ export class VerEstablecimientosComponent implements AfterViewInit {
             Swal.fire({
               icon: 'error',
               title: 'Error :(',
-              html: 'No se pudo eliminar el establecimiento seleccionada porque hay establecimientos relacionados. <br> Elimine todos los establecimientos que utilicen el establecimiento e intente nuevamente.'
+              html: 'No se pudo eliminar el establecimiento seleccionada porque hay entidades relacionadas (alumnos, directivos, entregas). <br> Elimine todos las entidades relacionadas e intente nuevamente.'
             });
           }
         }
       }
     });
   }
+
+  
 }

@@ -1,41 +1,36 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { Zona } from 'src/app/models/zona';
-import { ZonaService } from 'src/app/services/zona.service';
-import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
-import { Oferta } from 'src/app/models/oferta';
-import { OfertaService } from 'src/app/services/oferta.service';
-import { Telefono } from 'src/app/models/telefono';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { UbicacionesService } from 'src/app/services/ubicaciones.service';
-import { EstablecimientoService } from 'src/app/services/establecimiento.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, Observable, shareReplay } from 'rxjs';
 import { Ambito } from 'src/app/models/ambito';
+import { EstablecimientoDetalles } from 'src/app/models/establecimiento';
 import { Modalidad } from 'src/app/models/modalidad';
 import { Nivel } from 'src/app/models/nivel';
+import { Oferta } from 'src/app/models/oferta';
 import { Sector } from 'src/app/models/sector';
+import { Telefono } from 'src/app/models/telefono';
 import { Turno } from 'src/app/models/turno';
-import { OpcionesEstablecimientoService } from 'src/app/services/opciones-establecimiento-service.service';
+import { Zona } from 'src/app/models/zona';
+import { EstablecimientoService } from 'src/app/services/establecimiento.service';
 import { JSONHelper } from 'src/app/services/helpers/jsonhelper.service';
-import { MatDialog } from '@angular/material/dialog';
-import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
+import { OfertaService } from 'src/app/services/oferta.service';
+import { OpcionesEstablecimientoService } from 'src/app/services/opciones-establecimiento-service.service';
+import { UbicacionesService } from 'src/app/services/ubicaciones.service';
+import { ZonaService } from 'src/app/services/zona.service';
+import Swal from 'sweetalert2';
 import { NuevaOfertaComponent } from '../ofertas/nueva-oferta/nueva-oferta.component';
-import { MapType } from '@angular/compiler';
+import { NuevaZonaComponent } from '../zonas/nueva-zona/nueva-zona.component';
+
 
 @Component({
-  selector: 'app-nuevo-establecimiento',
-  templateUrl: './nuevo-establecimiento.component.html',
-  styleUrls: ['./nuevo-establecimiento.component.scss'],
+  selector: 'app-editar-establecimientos',
+  templateUrl: './editar-establecimientos.component.html',
+  styleUrls: ['./editar-establecimientos.component.scss']
 })
-export class NuevoEstablecimientoComponent implements OnInit {
+export class EditarEstablecimientoComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -43,7 +38,9 @@ export class NuevoEstablecimientoComponent implements OnInit {
       shareReplay()
     );
 
-  uploading = false;
+  establecimientoID: number = -1;
+
+  editarEstablecimientoForm: FormGroup = new FormGroup({});
 
   loadingZonas = true;
   loadingOfertas = true;
@@ -54,19 +51,14 @@ export class NuevoEstablecimientoComponent implements OnInit {
   loadingTurnos = true;
 
 
+  turnos: Turno[] = [];
+  sectores: Sector[] = [];
+  niveles: Nivel[] = [];
+  modalidades: Modalidad[] = [];
+  ambitos: Ambito[] = [];
   zonas: Zona[] = [];
   ofertas: Oferta[] = [];
 
-  ambitos: Ambito[] = [];
-  modalidades: Modalidad[] = [];
-  niveles: Nivel[] = [];
-  sectores: Sector[] = [];
-  turnos: Turno[] = [];
-
-
-  provincias: any[] = [];
-  departamentos: any[] = [];
-  localidades: any[] = [];
 
   telefonoInput = new FormControl('');
   tipoTelefonoSelect = 'fijo';
@@ -78,6 +70,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
     'acciones',
   ];
 
+  provincias: any[] = [];
+  provinciaSeleccionada: string = '';
+  departamentos: any[] = [];
+  departamentoSeleccionado: string = '';
+  localidades: any[] = [];
+  localidadSeleccionada: string = '';
+
   mapOptions: google.maps.MapOptions = {
     streetViewControl: false,
     mapTypeControl: false,
@@ -85,14 +84,12 @@ export class NuevoEstablecimientoComponent implements OnInit {
     clickableIcons: false,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   };
-  mapCenter: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+  mapCenter: google.maps.LatLngLiteral = { lat: -34.6989, lng: -64.7597 };
   mapZoom = 4;
 
-  center: google.maps.LatLngLiteral = {lat: -34.6989, lng: -64.7597};
+  center: google.maps.LatLngLiteral = { lat: -34.6989, lng: -64.7597 };
 
-
-
-  nuevoEstablecimientoForm: FormGroup;
+  uploading = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -103,10 +100,10 @@ export class NuevoEstablecimientoComponent implements OnInit {
     private _ubicacionesService: UbicacionesService,
     private _establecimientoService: EstablecimientoService,
     private _formBuilder: FormBuilder,
+    private _route: ActivatedRoute,
     private _router: Router
   ) {
-    this.provincias = this._ubicacionesService.provincias();
-    this.nuevoEstablecimientoForm = this._formBuilder.group({
+    this.editarEstablecimientoForm = this._formBuilder.group({
       //Datos correspondientes a Establecimiento
       cue: new FormControl('', [Validators.required]),
       nombre: new FormControl('', [Validators.required]),
@@ -138,15 +135,58 @@ export class NuevoEstablecimientoComponent implements OnInit {
       ofertas: new FormControl('', [Validators.required]), //
       turnos: new FormControl('', [Validators.required]), //
     });
+    this._route.queryParams.subscribe({
+      next: async (params) => {
+        this.establecimientoID = params['establecimientoID'];
+        this._establecimientoService.show(this.establecimientoID).then(
+          (establecimiento: EstablecimientoDetalles) => {
+            let horarios_desde = establecimiento.horario.split('-')[0];
+            let horarios_hasta = establecimiento.horario.split('-')[1];
+            this.provinciaSeleccionada = establecimiento.domicilio.provincia;
+            this.departamentoSeleccionado = establecimiento.domicilio.departamento;
+            this.localidadSeleccionada = establecimiento.domicilio.localidad;
+            this.editarEstablecimientoForm = this._formBuilder.group({
+              //Datos correspondientes a Establecimiento
+              cue: new FormControl(establecimiento.cue, [Validators.required]),
+              nombre: new FormControl(establecimiento.nombre, [Validators.required]),
+              sectorID: new FormControl(establecimiento.sectorID, [Validators.required]),
+              modalidadID: new FormControl(establecimiento.modalidadID, [Validators.required]),
+              ambitoID: new FormControl(establecimiento.ambitoID, [Validators.required]),
+              nivelID: new FormControl(establecimiento.nivelID, [Validators.required]),
+              zonaID: new FormControl(establecimiento.zonaID, [Validators.required]),
+              matricula: new FormControl(establecimiento.matricula, [Validators.min(1)]),
+              mail: new FormControl(establecimiento.mail, [Validators.email]),
+              horario_desde: new FormControl(horarios_desde),
+              horario_hasta: new FormControl(horarios_hasta),
+              //Datos correspondientes a Domicilio
+              provincia: new FormControl('', [Validators.required]), //
+              departamento: new FormControl('', [Validators.required]),
+              localidad: new FormControl('', [Validators.required]), //
+              cod_postal: new FormControl(establecimiento.domicilio.cod_postal, [Validators.required]), //
+              calle: new FormControl(establecimiento.domicilio.calle, [Validators.required]), //
+              barrio: new FormControl(establecimiento.domicilio.barrio), //
+              numero: new FormControl(establecimiento.domicilio.numero), //
+              cardinalidad: new FormControl(establecimiento.domicilio.cardinalidad), //
+              observacion: new FormControl(establecimiento.domicilio.observacion), //
+
+              //Ofertas y Turnos
+              ofertas: new FormControl('', [Validators.required]), //
+              turnos: new FormControl('', [Validators.required]), //
+            });
+            this.center = { lat: establecimiento.domicilio.lat, lng: establecimiento.domicilio.lng };
+            this.mapCenter = this.center;
+            this.mapZoom = 15;
+            this.telefonos = establecimiento.telefonoestablecimientos;
+            this.dataSourceTelefonos = new MatTableDataSource(this.telefonos);
+            this.loadUbicacion();
+          }
+        )
+      }
+    })
   }
 
   ngOnInit(): void {
-    this.load(); 
-  }
-
-
-  moveMap(event: google.maps.MapMouseEvent) {
-    this.center = (event.latLng?.toJSON() || {lat: 0, lng: 0});
+    this.load();
   }
 
   private async load() {
@@ -157,13 +197,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
 
   private async loadZonas() {
     this.loadingZonas = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.zonas = [];
     try {
       this.zonas = await this._zonaService.indexAll();
       this.loadingZonas = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -182,13 +222,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadOfertas() {
     this.loadingOfertas = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.ofertas = [];
     try {
       this.ofertas = await this._ofertaService.indexAll();
       this.loadingOfertas = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       if (error.status == 404)
         Swal.fire({
@@ -205,7 +245,7 @@ export class NuevoEstablecimientoComponent implements OnInit {
         }).then(() => this._router.navigate(['establecimientos']));
     }
   }
-  private loadOpciones(){
+  private loadOpciones() {
     this.loadAmbitos();
     this.loadModalidades();
     this.loadNiveles();
@@ -214,13 +254,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadAmbitos() {
     this.loadingAmbitos = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.ambitos = [];
     try {
       this.ambitos = await this._opcionesEstablecimientoService.indexAmbito();
       this.loadingAmbitos = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -238,13 +278,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadModalidades() {
     this.loadingModalidades = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.modalidades = [];
     try {
       this.modalidades = await this._opcionesEstablecimientoService.indexModalidad();
       this.loadingModalidades = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -262,13 +302,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadNiveles() {
     this.loadingNiveles = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.niveles = [];
     try {
       this.niveles = await this._opcionesEstablecimientoService.indexNivel();
       this.loadingNiveles = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -286,13 +326,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadSectores() {
     this.loadingSectores = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.sectores = [];
     try {
       this.sectores = await this._opcionesEstablecimientoService.indexSector();
       this.loadingSectores = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -310,13 +350,13 @@ export class NuevoEstablecimientoComponent implements OnInit {
   }
   private async loadTurnos() {
     this.loadingTurnos = true;
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.turnos = [];
     try {
       this.turnos = await this._opcionesEstablecimientoService.indexTurno();
       this.loadingTurnos = false;
-      this.nuevoEstablecimientoForm.enable();
-        
+      this.editarEstablecimientoForm.enable();
+
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -333,6 +373,33 @@ export class NuevoEstablecimientoComponent implements OnInit {
     }
   }
 
+  agregarZona() {
+    const dialogRef = this.dialog.open(NuevaZonaComponent);
+    dialogRef.afterClosed().subscribe({
+      next: async () => {
+        this.loadingZonas = true;
+        this.editarEstablecimientoForm.disable();
+        await this.loadZonas();
+        this.loadingZonas = false;
+        this.editarEstablecimientoForm.enable();
+
+      }
+    })
+  }
+  agregarOferta() {
+    const dialogRef = this.dialog.open(NuevaOfertaComponent);
+    dialogRef.afterClosed().subscribe({
+      next: async () => {
+        this.loadingOfertas = true;
+        this.editarEstablecimientoForm.disable();
+        await this.loadOfertas();
+        this.loadingOfertas = false;
+        this.editarEstablecimientoForm.enable();
+
+      }
+    })
+  }
+
   agregarTelefono() {
     let telefono = {
       telefono: this.telefonoInput.value,
@@ -343,88 +410,85 @@ export class NuevoEstablecimientoComponent implements OnInit {
     this.tipoTelefonoSelect = 'fijo';
     this.telefonoInput.reset();
   }
-  agregarZona() {
-    const dialogRef = this.dialog.open(NuevaZonaComponent);
-    dialogRef.afterClosed().subscribe({
-      next: async () => {
-        this.loadingZonas = true;
-        this.nuevoEstablecimientoForm.disable();
-        await this.loadZonas();
-        this.loadingZonas = false;
-        this.nuevoEstablecimientoForm.enable();
-        
-      }
-    })
-  }
-  agregarOferta() {
-    const dialogRef = this.dialog.open(NuevaOfertaComponent);
-    dialogRef.afterClosed().subscribe({
-      next: async () => {
-        this.loadingOfertas = true;
-        this.nuevoEstablecimientoForm.disable();
-        await this.loadOfertas();
-        this.loadingOfertas = false;
-        this.nuevoEstablecimientoForm.enable();
-        
-      }
-    })
-  }
+
   eliminarTelefono(index: number) {
     this.telefonos.splice(index, 1);
     this.dataSourceTelefonos.data = this.telefonos;
   }
 
+  loadUbicacion() {
+    this.provincias = this._ubicacionesService.provincias();
+    let provSel = this.provincias.find(p => p.nombre == this.provinciaSeleccionada);
+    this.editarEstablecimientoForm.get('provincia')?.setValue(provSel);
+
+    this.departamentos = this._ubicacionesService.departamentos(
+      this.editarEstablecimientoForm.get('provincia')?.value.id
+    );
+    let depSel = this.departamentos.find(d => d.nombre == this.departamentoSeleccionado);
+    this.editarEstablecimientoForm.get('departamento')?.setValue(depSel);
+    this.editarEstablecimientoForm.get('departamento')?.enable();
+
+
+    this.localidades = this._ubicacionesService.localidades(
+      this.editarEstablecimientoForm.get('departamento')?.value.id
+    );
+    let locSel = this.localidades.find(l => l.nombre == this.localidadSeleccionada);
+    this.editarEstablecimientoForm.get('localidad')?.setValue(locSel);
+    this.editarEstablecimientoForm.get('localidad')?.enable();
+  }
+
   setearDepartamentos() {
     this.departamentos = this._ubicacionesService.departamentos(
-      this.nuevoEstablecimientoForm.get('provincia')?.value.id
+      this.editarEstablecimientoForm.get('provincia')?.value.id
     );
-    this.nuevoEstablecimientoForm.get('departamento')?.enable();
+    this.editarEstablecimientoForm.get('departamento')?.enable();
   }
   setearLocalidades() {
     this.localidades = this._ubicacionesService.localidades(
-      this.nuevoEstablecimientoForm.get('departamento')?.value.id
+      this.editarEstablecimientoForm.get('departamento')?.value.id
     );
-    this.nuevoEstablecimientoForm.get('localidad')?.enable();
+    this.editarEstablecimientoForm.get('localidad')?.enable();
   }
-  setearCentroide(){
-    this.center =  
-    { 
-      lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, 
-      lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon 
+  setearCentroide() {
+    this.center =
+    {
+      lat: this.editarEstablecimientoForm.controls['localidad'].value.centroide.lat,
+      lng: this.editarEstablecimientoForm.controls['localidad'].value.centroide.lon
     };
-    this.mapCenter = 
-    { 
-      lat: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lat, 
-      lng: this.nuevoEstablecimientoForm.controls['localidad'].value.centroide.lon 
+    this.mapCenter =
+    {
+      lat: this.editarEstablecimientoForm.controls['localidad'].value.centroide.lat,
+      lng: this.editarEstablecimientoForm.controls['localidad'].value.centroide.lon
     };
     this.mapZoom = 15;
   }
 
-  public async agregarEstablecimiento() {
-    let nuevosValoresEstablecimiento = JSONHelper.removeEmpty(
-      this.nuevoEstablecimientoForm.getRawValue()
+  public async editarEstablecimiento() {
+    let editarValoresEstablecimiento = JSONHelper.removeEmpty(
+      this.editarEstablecimientoForm.getRawValue()
     );
 
-    nuevosValoresEstablecimiento.provincia =
-      nuevosValoresEstablecimiento.provincia.nombre;
-    nuevosValoresEstablecimiento.departamento =
-      nuevosValoresEstablecimiento.departamento.nombre;
-    nuevosValoresEstablecimiento.localidad =
-      nuevosValoresEstablecimiento.localidad.nombre;
-    nuevosValoresEstablecimiento.horario = 
-    `${nuevosValoresEstablecimiento.horario_desde}-${nuevosValoresEstablecimiento.horario_hasta}`;
-    nuevosValoresEstablecimiento.telefonos = this.telefonos;
-    nuevosValoresEstablecimiento.lat = this.center.lat;
-    nuevosValoresEstablecimiento.lng = this.center.lng;
-    delete nuevosValoresEstablecimiento.horario_desde;
-    delete nuevosValoresEstablecimiento.horario_hasta;
+    editarValoresEstablecimiento.establecimientoID = this.establecimientoID;
+      editarValoresEstablecimiento.provincia =
+      editarValoresEstablecimiento.provincia.nombre;
+    editarValoresEstablecimiento.departamento =
+      editarValoresEstablecimiento.departamento.nombre;
+    editarValoresEstablecimiento.localidad =
+      editarValoresEstablecimiento.localidad.nombre;
+    editarValoresEstablecimiento.horario =
+      `${editarValoresEstablecimiento.horario_desde}-${editarValoresEstablecimiento.horario_hasta}`;
+    editarValoresEstablecimiento.telefonos = this.telefonos;
+    editarValoresEstablecimiento.lat = this.center.lat;
+    editarValoresEstablecimiento.lng = this.center.lng;
+    delete editarValoresEstablecimiento.horario_desde;
+    delete editarValoresEstablecimiento.horario_hasta;
 
-    this.nuevoEstablecimientoForm.disable();
+    this.editarEstablecimientoForm.disable();
     this.telefonoInput.disable();
     this.uploading = true;
     try {
-      let response = await this._establecimientoService.store(
-        nuevosValoresEstablecimiento
+      let response = await this._establecimientoService.update(
+        editarValoresEstablecimiento
       );
       if (response) {
         if (response.errores) {
@@ -445,11 +509,11 @@ export class NuevoEstablecimientoComponent implements OnInit {
             icon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            text: 'Se agregó el establecimiento correctamente',
+            text: 'Se editó el establecimiento correctamente',
             title: 'Agregado',
           });
         }
-        this._router.navigate(['establecimientos']);
+        this._router.navigate(['establecimientos/ver']);
       }
     } catch (error: any) {
       await Swal.fire({
@@ -464,13 +528,15 @@ export class NuevoEstablecimientoComponent implements OnInit {
             ? error.message
             : '',
       });
-      this._router.navigate(['establecimientos']);
+      this._router.navigate(['establecimientos/ver']);
     }
   }
-  
-  loading() : boolean {
-    return this.loadingAmbitos || this.loadingModalidades || this.loadingNiveles || this.loadingOfertas || this.loadingSectores || this.loadingTurnos || this.loadingZonas;
+
+  moveMap(event: google.maps.MapMouseEvent) {
+    this.center = (event.latLng?.toJSON() || { lat: 0, lng: 0 });
   }
 
-
+  public loading(): boolean {
+    return this.loadingAmbitos || this.loadingModalidades || this.loadingNiveles || this.loadingOfertas || this.loadingSectores || this.loadingTurnos || this.loadingZonas;
+  }
 }

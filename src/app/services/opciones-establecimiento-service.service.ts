@@ -12,7 +12,7 @@ import { GLOBAL } from './global';
   providedIn: 'root'
 })
 
-export class OpcionesEstablecimientoServiceService {
+export class OpcionesEstablecimientoService {
 
   constructor(private _http: HttpClient) { }
 

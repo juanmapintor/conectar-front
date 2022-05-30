@@ -1,1 +1,20 @@
-<p>{{info}}</p>
+<h2 mat-dialog-title *ngIf="isDialog">{{ zonaDetalles.nombre_zona }}</h2>
+<div class="row">
+    <div class="field" [class.margin-not-handset]="!(isHandset$ | async)">
+        <p class="main">SUPERVISOR:</p>
+        <p class="info">{{ zonaDetalles.nombre_supervisor + ' ' + zonaDetalles.apellido_supervisor}}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="field" [class.margin-not-handset]="!(isHandset$ | async)">
+        <p class="main">MAIL SUPERVISOR:</p>
+        <p class="info">{{ zonaDetalles.mail_supervisor }}</p>
+    </div>
+    <div class="field">
+        <p class="main">TELEFONO SUPERVISOR:</p>
+        <p class="info">{{ zonaDetalles.telefono_supervisor }}</p>
+    </div>
+</div>
+<div class="row" *ngIf="isDialog">
+    <button mat-raised-button mat-dialog-close color="primary" style="margin-left: auto; margin-top: 15px;">Aceptar</button>
+</div>

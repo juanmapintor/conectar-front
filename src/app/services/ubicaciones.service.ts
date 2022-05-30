@@ -18,6 +18,8 @@ export class UbicacionesService {
     return provincias;
   }
 
+  
+
   public departamentos(idProvincia: string){
     let departamentos: any = [];
     for(let departamento of departamentosLista.departamentos){
@@ -26,11 +28,12 @@ export class UbicacionesService {
     return departamentos;
   }
 
-  public localidades(idDepartamento: string){
+   public localidades(idDepartamento: string){
     let localidades: any = [];
     for(let localidad of localidadesLista.localidades){
       if(localidad.departamento.id == idDepartamento) localidades.push({id: localidad.id, nombre: localidad.nombre, centroide: localidad.centroide});
     }
     return localidades;
   }
+
 }

@@ -39,7 +39,6 @@ export class EstablecimientoService {
   }
 
   public async store(nuevaEstablecimientoCompleto: any): Promise<any> {
-    console.log(nuevaEstablecimientoCompleto);
     try {
       nuevaEstablecimientoCompleto.establecimientoID = -1;
       let establecimiento: any = await firstValueFrom(
@@ -54,40 +53,36 @@ export class EstablecimientoService {
       throw error;
     }
   }
-  /*
-    public async update(establecimientoID: number, establecimientoActualizada: any): Promise {
-      try {
-        establecimientoActualizada.establecimientoID = -1;
-        let establecimiento: any = await firstValueFrom(
-          this._http.put(
-            GLOBAL.API_URL + `establecimientos/${establecimientoID}`,
-            JSON.stringify(establecimientoActualizada),
-            GLOBAL.JSON_HEADERS
-          )
-        );
-        return new any(
-          establecimiento.establecimientoID,
-          establecimiento.establecimiento
-        );
-      } catch (error) {
-        throw error;
-      }
+
+  public async update(establecimientoActualizado: any): Promise<any> {
+    try {
+
+      let establecimiento: any = await firstValueFrom(
+        this._http.put(
+          GLOBAL.API_URL + 'establecimientos/' + establecimientoActualizado.establecimientoID,
+          JSON.stringify(establecimientoActualizado),
+          GLOBAL.JSON_HEADERS
+        )
+      );
+      return establecimiento;
+    } catch (error) {
+      throw error;
     }
-  
-    
-    */
-   public async destroy(establecimientoID: number): Promise<boolean> {
-      try {
-        let response: any = await firstValueFrom(
-          this._http.delete(
-            GLOBAL.API_URL + `establecimientos/${establecimientoID}`,
-            GLOBAL.JSON_HEADERS
-          )
-        );
-        if (response.deleted) return response.deleted;
-        return false;
-      } catch (error) {
-        throw error;
-      }
+  }
+
+
+  public async destroy(establecimientoID: number): Promise<boolean> {
+    try {
+      let response: any = await firstValueFrom(
+        this._http.delete(
+          GLOBAL.API_URL + `establecimientos/${establecimientoID}`,
+          GLOBAL.JSON_HEADERS
+        )
+      );
+      if (response.deleted) return response.deleted;
+      return false;
+    } catch (error) {
+      throw error;
     }
+  }
 }
